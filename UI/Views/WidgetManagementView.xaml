@@ -1,0 +1,614 @@
+<!-- ابتدای فایل: UI/Views/WidgetManagementView.xaml - بخش 1 -->
+<!-- مسیر: /UI/Views/WidgetManagementView.xaml -->
+
+<UserControl x:Class="TradingJournal.UI.Views.WidgetManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1200"
+             FlowDirection="RightToLeft">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <materialDesign:ColorZone Mode="PrimaryMid" Padding="16" Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" 
+                          Text="مدیریت ویجت‌ها" 
+                          FontSize="20" 
+                          FontWeight="Bold"
+                          VerticalAlignment="Center"/>
+
+                <ComboBox Grid.Column="1"
+                         x:Name="TabFilterComboBox"
+                         Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                         materialDesign:HintAssist.Hint="فیلتر بر اساس تب"
+                         Width="200"
+                         Margin="32,0"
+                         SelectionChanged="TabFilterComboBox_SelectionChanged">
+                    <ComboBoxItem Content="همه تب‌ها" IsSelected="True"/>
+                </ComboBox>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button x:Name="AddWidgetButton"
+                           Style="{StaticResource MaterialDesignRaisedLightButton}"
+                           Margin="8,0"
+                           Click="AddWidgetButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Margin="0,0,8,0"/>
+                            <TextBlock Text="ویجت جدید"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:Name="WidgetLibraryButton"
+                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Margin="8,0"
+                           Click="WidgetLibraryButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="LibraryBooks" Margin="0,0,8,0"/>
+                            <TextBlock Text="کتابخانه"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </materialDesign:ColorZone>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Widget Types Panel -->
+            <materialDesign:Card Grid.Column="0" Margin="16,16,8,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                              Text="انواع ویجت"
+                              FontSize="16"
+                              FontWeight="Medium"
+                              Margin="16"/>
+
+                    <ListBox x:Name="WidgetTypesListBox" 
+                            Grid.Row="1"
+                            SelectionChanged="WidgetTypesListBox_SelectionChanged">
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <materialDesign:PackIcon Kind="Counter" Margin="0,0,12,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="KPI" FontWeight="Medium"/>
+                                    <TextBlock Text="شاخص کلیدی عملکرد" FontSize="10" Opacity="0.6"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ListBoxItem>
+                        
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <materialDesign:PackIcon Kind="ChartLine" Margin="0,0,12,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="نمودار" FontWeight="Medium"/>
+                                    <TextBlock Text="خطی، ستونی، دایره‌ای" FontSize="10" Opacity="0.6"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ListBoxItem>
+                        
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <materialDesign:PackIcon Kind="TableLarge" Margin="0,0,12,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="جدول" FontWeight="Medium"/>
+                                    <TextBlock Text="نمایش داده‌ها" FontSize="10" Opacity="0.6"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ListBoxItem>
+                        
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <materialDesign:PackIcon Kind="CardText" Margin="0,0,12,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="کارت" FontWeight="Medium"/>
+                                    <TextBlock Text="اطلاعات خلاصه" FontSize="10" Opacity="0.6"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ListBoxItem>
+                        
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <materialDesign:PackIcon Kind="Filter" Margin="0,0,12,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="فیلتر" FontWeight="Medium"/>
+                                    <TextBlock Text="کنترل فیلترها" FontSize="10" Opacity="0.6"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ListBoxItem>
+                        
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Margin="8">
+                                <materialDesign:PackIcon Kind="TextBox" Margin="0,0,12,0"/>
+                                <StackPanel>
+                                    <TextBlock Text="متن/HTML" FontWeight="Medium"/>
+                                    <TextBlock Text="محتوای سفارشی" FontSize="10" Opacity="0.6"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Widgets Grid -->
+            <materialDesign:Card Grid.Column="1" Margin="8,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                           BorderThickness="0,0,0,1"
+                           BorderBrush="{DynamicResource MaterialDesignDivider}"
+                           Padding="16">
+                        <Grid>
+                            <TextBlock Text="ویجت‌های موجود"
+                                      FontSize="16"
+                                      FontWeight="Medium"
+                                      VerticalAlignment="Center"/>
+                            
+                            <TextBox x:Name="SearchWidgetBox"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="جستجو..."
+                                    Width="200"
+                                    HorizontalAlignment="Right"
+                                    TextChanged="SearchWidgetBox_TextChanged"/>
+                        </Grid>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1" 
+                                 VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="WidgetsItemsControl">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" 
+                                             HorizontalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <materialDesign:Card Margin="8"
+                                                       Width="200"
+                                                       Height="200"
+                                                       Cursor="Hand">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            
+                                            <!-- Widget Preview -->
+                                            <Border Grid.Row="0" 
+                                                   Background="{DynamicResource MaterialDesignPaper}"
+                                                   Margin="8">
+                                                <Grid>
+                                                    <materialDesign:PackIcon Kind="{Binding IconName}"
+                                                                           Width="48"
+                                                                           Height="48"
+                                                                           HorizontalAlignment="Center"
+                                                                           VerticalAlignment="Center"
+                                                                           Opacity="0.3"/>
+                                                    <TextBlock Text="{Binding WidgetType}"
+                                                             HorizontalAlignment="Center"
+                                                             VerticalAlignment="Bottom"
+                                                             Margin="0,0,0,8"
+                                                             FontSize="10"
+                                                             Opacity="0.6"/>
+                                                </Grid>
+                                            </Border>
+                                            
+                                            <!-- Widget Info -->
+                                            <Border Grid.Row="1"
+                                                   Background="{DynamicResource PrimaryHueLightBrush}"
+                                                   Padding="8">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    
+                                                    <TextBlock Grid.Row="0"
+                                                             Text="{Binding WidgetNameFa}"
+                                                             FontWeight="Medium"
+                                                             TextTrimming="CharacterEllipsis"/>
+                                                    
+                                                    <StackPanel Grid.Row="1" 
+                                                              Orientation="Horizontal"
+                                                              Margin="0,4,0,0">
+                                                        <materialDesign:Chip Content="{Binding TabKey}"
+                                                                           Height="16"
+                                                                           FontSize="9"
+                                                                           Margin="0,0,4,0"/>
+                                                        <materialDesign:Chip Content="{Binding PositionText}"
+                                                                           Height="16"
+                                                                           FontSize="9"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                            
+                                            <!-- Actions Overlay -->
+                                            <Border Grid.Row="0" 
+                                                   Grid.RowSpan="2"
+                                                   Background="#AA000000"
+                                                   Visibility="Collapsed"
+                                                   x:Name="ActionsOverlay">
+                                                <StackPanel VerticalAlignment="Center"
+                                                          HorizontalAlignment="Center">
+                                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                                                           Margin="4"
+                                                           Click="EditWidget_Click"
+                                                           Tag="{Binding}"
+                                                           ToolTip="ویرایش">
+                                                        <materialDesign:PackIcon Kind="Pencil"/>
+                                                    </Button>
+                                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                                                           Margin="4"
+                                                           Click="DuplicateWidget_Click"
+                                                           Tag="{Binding}"
+                                                           ToolTip="کپی">
+                                                        <materialDesign:PackIcon Kind="ContentCopy"/>
+                                                    </Button>
+                                                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                                                           Background="Red"
+                                                           Margin="4"
+                                                           Click="DeleteWidget_Click"
+                                                           Tag="{Binding}"
+                                                           ToolTip="حذف">
+                                                        <materialDesign:PackIcon Kind="Delete"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+                                        
+                                        <materialDesign:Card.Triggers>
+                                            <EventTrigger RoutedEvent="MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ActionsOverlay"
+                                                                                      Storyboard.TargetProperty="Visibility">
+                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <EventTrigger RoutedEvent="MouseLeave">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ActionsOverlay"
+                                                                                      Storyboard.TargetProperty="Visibility">
+                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+                                                        </ObjectAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </materialDesign:Card.Triggers>
+                                    </materialDesign:Card>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </materialDesign:Card>
+<!-- ابتدای بخش 2 فایل: UI/Views/WidgetManagementView.xaml -->
+<!-- ادامه از بخش 1 -->
+
+            <!-- Widget Editor Panel -->
+            <materialDesign:Card Grid.Column="2" 
+                               Margin="8,16,16,16"
+                               x:Name="EditorCard"
+                               Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Border Grid.Row="0"
+                           Background="{DynamicResource PrimaryHueMidBrush}"
+                           Padding="16">
+                        <Grid>
+                            <TextBlock x:Name="EditorHeaderText"
+                                      Text="ویرایش ویجت"
+                                      FontSize="16"
+                                      FontWeight="Medium"
+                                      Foreground="White"/>
+                            
+                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                   HorizontalAlignment="Right"
+                                   Click="CloseEditor_Click">
+                                <materialDesign:PackIcon Kind="Close" Foreground="White"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Editor Content -->
+                    <ScrollViewer Grid.Row="1" 
+                                 VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="16">
+                            <!-- Basic Info -->
+                            <Expander Header="اطلاعات پایه" IsExpanded="True">
+                                <StackPanel Margin="8">
+                                    <TextBox x:Name="WidgetKeyTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="کلید ویجت"
+                                            IsReadOnly="True"
+                                            Margin="0,8"/>
+                                    
+                                    <TextBox x:Name="WidgetNameTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="نام انگلیسی"
+                                            Margin="0,8"/>
+                                    
+                                    <TextBox x:Name="WidgetNameFaTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="نام فارسی"
+                                            Margin="0,8"/>
+                                    
+                                    <ComboBox x:Name="WidgetTypeComboBox"
+                                             Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                             materialDesign:HintAssist.Hint="نوع ویجت"
+                                             Margin="0,8"
+                                             SelectionChanged="WidgetTypeComboBox_SelectionChanged">
+                                        <ComboBoxItem Content="KPI" Tag="kpi"/>
+                                        <ComboBoxItem Content="نمودار" Tag="chart"/>
+                                        <ComboBoxItem Content="جدول" Tag="table"/>
+                                        <ComboBoxItem Content="کارت" Tag="card"/>
+                                        <ComboBoxItem Content="فیلتر" Tag="filter"/>
+                                        <ComboBoxItem Content="سفارشی" Tag="custom"/>
+                                    </ComboBox>
+                                    
+                                    <ComboBox x:Name="TabKeyComboBox"
+                                             Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                             materialDesign:HintAssist.Hint="تب مقصد"
+                                             Margin="0,8"/>
+                                </StackPanel>
+                            </Expander>
+
+                            <!-- Position -->
+                            <Expander Header="موقعیت و اندازه" Margin="0,8">
+                                <Grid Margin="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <TextBox Grid.Row="0" Grid.Column="0"
+                                            x:Name="RowTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="ردیف"
+                                            Margin="0,0,4,8"/>
+                                    
+                                    <TextBox Grid.Row="0" Grid.Column="1"
+                                            x:Name="ColumnTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="ستون"
+                                            Margin="4,0,0,8"/>
+                                    
+                                    <TextBox Grid.Row="1" Grid.Column="0"
+                                            x:Name="RowSpanTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="تعداد ردیف"
+                                            Margin="0,0,4,8"/>
+                                    
+                                    <TextBox Grid.Row="1" Grid.Column="1"
+                                            x:Name="ColumnSpanTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="تعداد ستون"
+                                            Margin="4,0,0,8"/>
+                                    
+                                    <CheckBox Grid.Row="2" Grid.ColumnSpan="2"
+                                             x:Name="IsVisibleCheckBox"
+                                             Content="قابل نمایش"
+                                             IsChecked="True"
+                                             Margin="0,8,0,0"/>
+                                </Grid>
+                            </Expander>
+
+                            <!-- Data Configuration -->
+                            <Expander Header="تنظیمات داده" 
+                                     Margin="0,8"
+                                     x:Name="DataExpander">
+                                <StackPanel Margin="8">
+                                    <!-- Data Source -->
+                                    <ComboBox x:Name="DataSourceComboBox"
+                                             Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                             materialDesign:HintAssist.Hint="منبع داده"
+                                             Margin="0,8">
+                                        <ComboBoxItem Content="معاملات" Tag="trades"/>
+                                        <ComboBoxItem Content="خلاصه آماری" Tag="summary"/>
+                                        <ComboBoxItem Content="سفارشی" Tag="custom"/>
+                                    </ComboBox>
+                                    
+                                    <!-- Query Builder -->
+                                    <Border BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                           BorderThickness="1"
+                                           CornerRadius="4"
+                                           Padding="8"
+                                           Margin="0,8">
+                                        <StackPanel>
+                                            <TextBlock Text="Query Builder"
+                                                      FontWeight="Medium"
+                                                      Margin="0,0,0,8"/>
+                                            
+                                            <!-- Field Selection -->
+                                            <ComboBox x:Name="QueryFieldComboBox"
+                                                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                                     materialDesign:HintAssist.Hint="فیلد"
+                                                     Margin="0,4"/>
+                                            
+                                            <!-- Aggregation -->
+                                            <ComboBox x:Name="AggregationComboBox"
+                                                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                                     materialDesign:HintAssist.Hint="تجمیع"
+                                                     Margin="0,4">
+                                                <ComboBoxItem Content="تعداد" Tag="count"/>
+                                                <ComboBoxItem Content="مجموع" Tag="sum"/>
+                                                <ComboBoxItem Content="میانگین" Tag="average"/>
+                                                <ComboBoxItem Content="حداقل" Tag="min"/>
+                                                <ComboBoxItem Content="حداکثر" Tag="max"/>
+                                            </ComboBox>
+                                            
+                                            <!-- Filter -->
+                                            <TextBox x:Name="FilterTextBox"
+                                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                    materialDesign:HintAssist.Hint="فیلتر (JSON)"
+                                                    TextWrapping="Wrap"
+                                                    MinHeight="60"
+                                                    FontFamily="Consolas"
+                                                    Margin="0,4"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Expander>
+
+                            <!-- Visual Configuration -->
+                            <Expander Header="تنظیمات ظاهری" 
+                                     Margin="0,8"
+                                     x:Name="VisualExpander">
+                                <StackPanel Margin="8">
+                                    <!-- Chart Type (for chart widgets) -->
+                                    <ComboBox x:Name="ChartTypeComboBox"
+                                             Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                             materialDesign:HintAssist.Hint="نوع نمودار"
+                                             Margin="0,8"
+                                             Visibility="Collapsed">
+                                        <ComboBoxItem Content="خطی" Tag="line"/>
+                                        <ComboBoxItem Content="ستونی" Tag="bar"/>
+                                        <ComboBoxItem Content="دایره‌ای" Tag="pie"/>
+                                        <ComboBoxItem Content="ناحیه‌ای" Tag="area"/>
+                                        <ComboBoxItem Content="پراکندگی" Tag="scatter"/>
+                                    </ComboBox>
+                                    
+                                    <!-- Colors -->
+                                    <TextBox x:Name="ColorsTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="رنگ‌ها (کاما جدا)"
+                                            Margin="0,8"/>
+                                    
+                                    <!-- Icon -->
+                                    <ComboBox x:Name="IconComboBox"
+                                             Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                             materialDesign:HintAssist.Hint="آیکون"
+                                             Margin="0,8">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="{Binding}" 
+                                                                           Margin="0,0,8,0"/>
+                                                    <TextBlock Text="{Binding}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    
+                                    <!-- Show Options -->
+                                    <CheckBox x:Name="ShowLegendCheckBox"
+                                             Content="نمایش راهنما"
+                                             Margin="0,4"/>
+                                    
+                                    <CheckBox x:Name="ShowLabelsCheckBox"
+                                             Content="نمایش برچسب‌ها"
+                                             Margin="0,4"/>
+                                    
+                                    <CheckBox x:Name="ShowGridCheckBox"
+                                             Content="نمایش شبکه"
+                                             Margin="0,4"/>
+                                </StackPanel>
+                            </Expander>
+
+                            <!-- Refresh Settings -->
+                            <Expander Header="تنظیمات بازخوانی" Margin="0,8">
+                                <StackPanel Margin="8">
+                                    <CheckBox x:Name="AutoRefreshCheckBox"
+                                             Content="بازخوانی خودکار"
+                                             Margin="0,8"
+                                             Checked="AutoRefreshCheckBox_Checked"
+                                             Unchecked="AutoRefreshCheckBox_Checked"/>
+                                    
+                                    <TextBox x:Name="RefreshIntervalTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="فاصله بازخوانی (ثانیه)"
+                                            IsEnabled="{Binding ElementName=AutoRefreshCheckBox, Path=IsChecked}"
+                                            Margin="0,8"/>
+                                </StackPanel>
+                            </Expander>
+
+                            <!-- Advanced Configuration -->
+                            <Expander Header="تنظیمات پیشرفته" Margin="0,8">
+                                <TextBox x:Name="ConfigurationJsonTextBox"
+                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                        materialDesign:HintAssist.Hint="JSON Configuration"
+                                        TextWrapping="Wrap"
+                                        AcceptsReturn="True"
+                                        MinHeight="150"
+                                        FontFamily="Consolas"
+                                        Margin="8"/>
+                            </Expander>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Actions -->
+                    <Border Grid.Row="2"
+                           BorderThickness="0,1,0,0"
+                           BorderBrush="{DynamicResource MaterialDesignDivider}"
+                           Padding="16">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="پیش‌نمایش"
+                                       Style="{StaticResource MaterialDesignFlatButton}"
+                                       Click="PreviewWidget_Click"
+                                       Margin="0,0,8,0"/>
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal"
+                                       HorizontalAlignment="Right">
+                                <Button Content="انصراف"
+                                       Style="{StaticResource MaterialDesignOutlinedButton}"
+                                       Margin="0,0,8,0"
+                                       Click="CancelEdit_Click"/>
+                                <Button Content="ذخیره"
+                                       Style="{StaticResource MaterialDesignRaisedButton}"
+                                       Click="SaveWidget_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+    </Grid>
+</UserControl>
+
+<!-- پایان فایل: UI/Views/WidgetManagementView.xaml -->

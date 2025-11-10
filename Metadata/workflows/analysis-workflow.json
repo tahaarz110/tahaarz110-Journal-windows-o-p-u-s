@@ -1,0 +1,106 @@
+<!-- ابتدای فایل: Metadata/workflows/analysis-workflow.json -->
+<!-- مسیر: /Metadata/workflows/analysis-workflow.json -->
+
+{
+  "workflowId": "daily-analysis",
+  "workflowName": "Daily Analysis Workflow",
+  "workflowNameFa": "گردش کار تحلیل روزانه",
+  "description": "Automated daily analysis and reporting",
+  "trigger": "Schedule:Daily:22:00",
+  "isActive": true,
+  "variables": {
+    "minTrades": 5,
+    "reportFormat": "PDF",
+    "emailRecipients": ["trader@example.com"]
+  },
+  "steps": [
+    {
+      "stepId": "step-1",
+      "stepName": "Check Trade Count",
+      "type": "Decision",
+      "condition": "GetTodayTradeCount() >= minTrades",
+      "nextSteps": ["step-2", "step-end"]
+    },
+    {
+      "stepId": "step-2",
+      "stepName": "Calculate Daily Metrics",
+      "type": "Action",
+      "parameters": {
+        "action": "calculate",
+        "metrics": ["WinRate", "TotalProfit", "AverageRisk", "ProfitFactor"]
+      },
+      "nextSteps": ["step-3"]
+    },
+    {
+      "stepId": "step-3",
+      "stepName": "Generate Analysis",
+      "type": "Action",
+      "parameters": {
+        "action": "analyze",
+        "analysisType": "Performance",
+        "dateRange": "today"
+      },
+      "nextSteps": ["step-4"]
+    },
+    {
+      "stepId": "step-4",
+      "stepName": "Check Performance",
+      "type": "Decision",
+      "condition": "context.WinRate < 40 || context.TotalProfit < 0",
+      "nextSteps": ["step-5", "step-6"]
+    },
+    {
+      "stepId": "step-5",
+      "stepName": "Generate Warning Report",
+      "type": "Action",
+      "parameters": {
+        "action": "generateReport",
+        "template": "performance-warning",
+        "format": "PDF",
+        "includeRecommendations": true
+      },
+      "nextSteps": ["step-7"]
+    },
+    {
+      "stepId": "step-6",
+      "stepName": "Generate Success Report",
+      "type": "Action",
+      "parameters": {
+        "action": "generateReport",
+        "template": "daily-summary",
+        "format": "PDF"
+      },
+      "nextSteps": ["step-7"]
+    },
+    {
+      "stepId": "step-7",
+      "stepName": "Send Email",
+      "type": "Action",
+      "parameters": {
+        "action": "email",
+        "recipients": "emailRecipients",
+        "subject": "Daily Trading Analysis",
+        "attachReport": true
+      },
+      "nextSteps": ["step-8"]
+    },
+    {
+      "stepId": "step-8",
+      "stepName": "Save to Database",
+      "type": "Action",
+      "parameters": {
+        "action": "save",
+        "entity": "DailyAnalysis",
+        "data": "context"
+      },
+      "nextSteps": ["step-end"]
+    },
+    {
+      "stepId": "step-end",
+      "stepName": "End",
+      "type": "End"
+    }
+  ]
+}
+
+<!-- پایان فایل: Metadata/workflows/analysis-workflow.json -->

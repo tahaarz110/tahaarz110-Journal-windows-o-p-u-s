@@ -1,0 +1,33 @@
+<!-- مسیر فایل: Properties/Settings.settings -->
+<!-- ابتدای کد -->
+<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" 
+              CurrentProfile="(Default)" 
+              GeneratedClassNamespace="TradingJournal.Properties" 
+              GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Theme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Light</Value>
+    </Setting>
+    <Setting Name="Language" Type="System.String" Scope="User">
+      <Value Profile="(Default)">fa-IR</Value>
+    </Setting>
+    <Setting Name="AccentColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Blue</Value>
+    </Setting>
+    <Setting Name="FontSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">14</Value>
+    </Setting>
+    <Setting Name="FontFamily" Type="System.String" Scope="User">
+      <Value Profile="(Default)">B Nazanin</Value>
+    </Setting>
+    <Setting Name="LastBackupDate" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ConnectionString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Data Source=Data/TradingJournal.db</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
+<!-- پایان کد -->

@@ -1,0 +1,239 @@
+<!-- ابتدای فایل: UI/Views/FieldManagementView.xaml -->
+<!-- مسیر: /UI/Views/FieldManagementView.xaml -->
+
+<UserControl x:Class="TradingJournal.UI.Views.FieldManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1000"
+             FlowDirection="RightToLeft">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header Toolbar -->
+        <materialDesign:ColorZone Mode="PrimaryMid" 
+                                 Padding="16" 
+                                 Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" 
+                          Text="مدیریت فیلدها" 
+                          FontSize="20" 
+                          FontWeight="Bold"
+                          VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="2" 
+                           Orientation="Horizontal">
+                    <Button x:Name="AddFieldButton"
+                           Style="{StaticResource MaterialDesignRaisedLightButton}"
+                           Margin="8,0"
+                           Click="AddFieldButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Margin="0,0,8,0"/>
+                            <TextBlock Text="فیلد جدید"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:Name="ImportButton"
+                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Margin="8,0"
+                           Click="ImportButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Import" Margin="0,0,8,0"/>
+                            <TextBlock Text="ورود"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:Name="ExportButton"
+                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Margin="8,0"
+                           Click="ExportButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Export" Margin="0,0,8,0"/>
+                            <TextBlock Text="خروج"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </materialDesign:ColorZone>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Field Groups List -->
+            <materialDesign:Card Grid.Column="0" Margin="16,16,8,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" 
+                              Text="گروه‌های فیلد" 
+                              FontSize="16"
+                              FontWeight="Medium"
+                              Margin="16,16,16,8"/>
+
+                    <TreeView x:Name="FieldGroupsTree" 
+                             Grid.Row="1"
+                             Margin="0,8,0,0"
+                             SelectedItemChanged="FieldGroupsTree_SelectedItemChanged">
+                        <TreeViewItem Header="فیلدهای پایه" IsExpanded="True">
+                            <TreeViewItem Header="نماد و قیمت"/>
+                            <TreeViewItem Header="تاریخ و زمان"/>
+                            <TreeViewItem Header="حجم و مقدار"/>
+                        </TreeViewItem>
+                        <TreeViewItem Header="استراتژی و تحلیل" IsExpanded="True">
+                            <TreeViewItem Header="استراتژی‌ها"/>
+                            <TreeViewItem Header="اندیکاتورها"/>
+                            <TreeViewItem Header="الگوها"/>
+                        </TreeViewItem>
+                        <TreeViewItem Header="روانشناسی" IsExpanded="True">
+                            <TreeViewItem Header="احساسات"/>
+                            <TreeViewItem Header="سطح اطمینان"/>
+                        </TreeViewItem>
+                        <TreeViewItem Header="مدیریت ریسک" IsExpanded="True">
+                            <TreeViewItem Header="محاسبات ریسک"/>
+                            <TreeViewItem Header="مدیریت سرمایه"/>
+                        </TreeViewItem>
+                        <TreeViewItem Header="فیلدهای سفارشی" IsExpanded="True"/>
+                    </TreeView>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Fields DataGrid -->
+            <materialDesign:Card Grid.Column="1" Margin="8,16,16,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Search Bar -->
+                    <Grid Grid.Row="0" Margin="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="SearchBox"
+                                Grid.Column="0"
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="جستجو در فیلدها..."
+                                materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                                materialDesign:TextFieldAssist.LeadingIcon="Magnify"
+                                TextChanged="SearchBox_TextChanged"/>
+
+                        <Button x:Name="FilterButton"
+                               Grid.Column="1"
+                               Style="{StaticResource MaterialDesignIconButton}"
+                               Margin="8,0,0,0">
+                            <materialDesign:PackIcon Kind="FilterVariant"/>
+                        </Button>
+                    </Grid>
+
+                    <!-- Fields DataGrid -->
+                    <DataGrid x:Name="FieldsDataGrid" 
+                             Grid.Row="1"
+                             AutoGenerateColumns="False"
+                             CanUserAddRows="False"
+                             SelectionMode="Single"
+                             materialDesign:DataGridAssist.CellPadding="16 8"
+                             materialDesign:DataGridAssist.ColumnHeaderPadding="16 10">
+                        
+                        <DataGrid.Columns>
+                            <!-- Drag Handle -->
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <materialDesign:PackIcon Kind="DragHorizontalVariant" 
+                                                               Opacity="0.5"
+                                                               VerticalAlignment="Center"
+                                                               HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Field Name -->
+                            <DataGridTextColumn Header="نام فیلد" 
+                                              Binding="{Binding FieldName}" 
+                                              Width="150"/>
+
+                            <!-- Display Name -->
+                            <DataGridTextColumn Header="نام نمایشی" 
+                                              Binding="{Binding DisplayNameFa}" 
+                                              Width="150"/>
+
+                            <!-- Field Type -->
+                            <DataGridTemplateColumn Header="نوع" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <materialDesign:Chip Content="{Binding FieldType}"
+                                                           Background="{DynamicResource PrimaryHueMidBrush}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Required -->
+                            <DataGridCheckBoxColumn Header="اجباری" 
+                                                  Binding="{Binding IsRequired}" 
+                                                  Width="80"/>
+
+                            <!-- Visible -->
+                            <DataGridCheckBoxColumn Header="قابل نمایش" 
+                                                  Binding="{Binding IsVisible}" 
+                                                  Width="100"/>
+
+                            <!-- Actions -->
+                            <DataGridTemplateColumn Header="عملیات" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                   Padding="8"
+                                                   Click="EditField_Click"
+                                                   Tag="{Binding}">
+                                                <materialDesign:PackIcon Kind="Pencil"/>
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                   Padding="8"
+                                                   Click="DuplicateField_Click"
+                                                   Tag="{Binding}">
+                                                <materialDesign:PackIcon Kind="ContentCopy"/>
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                                                   Padding="8"
+                                                   Click="DeleteField_Click"
+                                                   Tag="{Binding}"
+                                                   Foreground="Red">
+                                                <materialDesign:PackIcon Kind="Delete"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+    </Grid>
+</UserControl>
+
+<!-- پایان فایل: UI/Views/FieldManagementView.xaml -->

@@ -1,0 +1,109 @@
+<!-- ابتدای فایل: Metadata/rules/trading-rules.json -->
+<!-- مسیر: /Metadata/rules/trading-rules.json -->
+
+{
+  "version": "1.0.0",
+  "rules": [
+    {
+      "ruleId": "risk-management-1",
+      "ruleName": "Max Risk Per Trade",
+      "ruleNameFa": "حداکثر ریسک هر معامله",
+      "type": "Validation",
+      "condition": "OnCreate",
+      "targetEntity": "Trade",
+      "targetField": "RiskPercent",
+      "expression": "RiskPercent <= 2",
+      "errorMessage": "Risk per trade should not exceed 2%",
+      "errorMessageFa": "ریسک هر معامله نباید بیشتر از 2% باشد",
+      "priority": 1,
+      "isActive": true
+    },
+    {
+      "ruleId": "risk-management-2",
+      "ruleName": "Daily Loss Limit",
+      "ruleNameFa": "حد ضرر روزانه",
+      "type": "Trigger",
+      "condition": "OnFieldChange",
+      "targetEntity": "Trade",
+      "expression": "DailyLoss > AccountBalance * 0.05",
+      "actions": {
+        "notify": {
+          "title": "Daily Loss Limit Reached",
+          "message": "You have reached your daily loss limit",
+          "type": "Warning"
+        },
+        "blockTrading": true
+      },
+      "priority": 1,
+      "isActive": true
+    },
+    {
+      "ruleId": "psychology-1",
+      "ruleName": "Consecutive Losses Alert",
+      "ruleNameFa": "هشدار ضررهای متوالی",
+      "type": "Notification",
+      "condition": "Custom",
+      "expression": "ConsecutiveLosses >= 3",
+      "actions": {
+        "notify": {
+          "title": "Consecutive Losses",
+          "titleFa": "ضررهای متوالی",
+          "message": "You have 3 consecutive losses. Consider taking a break.",
+          "messageFa": "شما 3 ضرر متوالی داشته‌اید. استراحت کنید.",
+          "type": "Warning"
+        }
+      },
+      "priority": 2,
+      "isActive": true
+    },
+    {
+      "ruleId": "calculation-1",
+      "ruleName": "Auto Calculate Risk Reward",
+      "ruleNameFa": "محاسبه خودکار ریسک به ریوارد",
+      "type": "Calculation",
+      "condition": "OnFieldChange",
+      "targetEntity": "Trade",
+      "targetField": "RiskRewardRatio",
+      "expression": "abs(TakeProfit - EntryPrice) / abs(EntryPrice - StopLoss)",
+      "priority": 3,
+      "isActive": true
+    },
+    {
+      "ruleId": "workflow-1",
+      "ruleName": "Trade Close Workflow",
+      "ruleNameFa": "گردش کار بستن معامله",
+      "type": "Workflow",
+      "condition": "OnUpdate",
+      "targetEntity": "Trade",
+      "expression": "Status == 'Closed' && PreviousStatus == 'Open'",
+      "actions": {
+        "steps": [
+          {
+            "type": "calculate",
+            "field": "ProfitLoss",
+            "expression": "(ExitPrice - EntryPrice) * Volume * (Direction == 'Buy' ? 1 : -1)"
+          },
+          {
+            "type": "calculate",
+            "field": "ProfitLossPercent",
+            "expression": "(ProfitLoss / (EntryPrice * Volume)) * 100"
+          },
+          {
+            "type": "update",
+            "field": "UpdatedAt",
+            "value": "now()"
+          },
+          {
+            "type": "notify",
+            "condition": "ProfitLoss > 0",
+            "message": "Trade closed with profit"
+          }
+        ]
+      },
+      "priority": 1,
+      "isActive": true
+    }
+  ]
+}
+
+<!-- پایان فایل: Metadata/rules/trading-rules.json -->

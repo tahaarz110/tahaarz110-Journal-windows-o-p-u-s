@@ -1,0 +1,48 @@
+<!-- مسیر فایل: App.xaml -->
+<!-- ابتدای کد -->
+<Application x:Class="TradingJournal.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:TradingJournal.UI.Converters;assembly=TradingJournal.UI"
+             StartupUri="MainWindow.xaml">
+    
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Material Design -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.LightBlue.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Global Converters -->
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+            <converters:InverseBoolConverter x:Key="InverseBool"/>
+            <converters:ProfitToColorConverter x:Key="ProfitToColor"/>
+            <converters:DecimalToStringConverter x:Key="DecimalToString"/>
+            <converters:DateTimeToStringConverter x:Key="DateTimeToString"/>
+            <converters:EnumToStringConverter x:Key="EnumToString"/>
+            <converters:MultiplyConverter x:Key="Multiply"/>
+            <converters:PercentageConverter x:Key="Percentage"/>
+            <converters:NullToVisibilityConverter x:Key="NullToVisibility"/>
+            <converters:WidgetTypeToIconConverter x:Key="WidgetTypeToIcon"/>
+            <converters:StatusToEnableConverter x:Key="StatusToEnable"/>
+            <converters:StatusToDisableConverter x:Key="StatusToDisable"/>
+            <converters:NullToFalseConverter x:Key="NullToFalse"/>
+            
+            <!-- Global Settings -->
+            <FontFamily x:Key="DefaultFontFamily">B Nazanin</FontFamily>
+            
+            <!-- Colors -->
+            <SolidColorBrush x:Key="ProfitColor" Color="#4CAF50"/>
+            <SolidColorBrush x:Key="LossColor" Color="#F44336"/>
+            <SolidColorBrush x:Key="NeutralColor" Color="#9E9E9E"/>
+            
+            <!-- RTL Support -->
+            <FlowDirection x:Key="DefaultFlowDirection">RightToLeft</FlowDirection>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+<!-- پایان کد -->

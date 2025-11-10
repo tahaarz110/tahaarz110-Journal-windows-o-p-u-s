@@ -1,0 +1,76 @@
+// 📁 Plugins/SamplePlugin/manifest.json
+// ===== شروع کد =====
+{
+  "id": "sample-analysis-plugin",
+  "name": "پلاگین تحلیل نمونه",
+  "description": "تحلیل آماری پیشرفته معاملات",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "author": {
+    "name": "Trading Journal Team",
+    "email": "support@tradingjournal.com",
+    "url": "https://tradingjournal.com"
+  },
+  "main": "SampleAnalysisPlugin.dll",
+  "icon": "icon.png",
+  "category": "Analysis",
+  "tags": ["analysis", "statistics", "reporting"],
+  "permissions": [
+    "ReadTrades",
+    "ReadSettings",
+    "WriteCache",
+    "CreateWidget"
+  ],
+  "dependencies": {
+    "Newtonsoft.Json": "13.0.3",
+    "OxyPlot.Wpf": "2.1.2"
+  },
+  "settings": {
+    "schema": {
+      "type": "object",
+      "properties": {
+        "period": {
+          "type": "number",
+          "default": 30,
+          "title": "دوره زمانی",
+          "description": "دوره زمانی برای تحلیل (روز)"
+        },
+        "includeOpenTrades": {
+          "type": "boolean",
+          "default": false,
+          "title": "شامل معاملات باز",
+          "description": "آیا معاملات باز نیز در تحلیل لحاظ شوند"
+        }
+      }
+    }
+  },
+  "commands": [
+    {
+      "id": "analyze",
+      "name": "تحلیل معاملات",
+      "hotkey": "Ctrl+Shift+A"
+    },
+    {
+      "id": "report",
+      "name": "گزارش ماهانه",
+      "hotkey": "Ctrl+Shift+R"
+    }
+  ],
+  "widgets": [
+    {
+      "id": "win-rate",
+      "name": "نرخ برد",
+      "size": { "width": 2, "height": 1 }
+    },
+    {
+      "id": "profit-chart",
+      "name": "نمودار سود",
+      "size": { "width": 4, "height": 2 }
+    }
+  ],
+  "changelog": {
+    "1.0.0": "انتشار اولیه",
+    "0.9.0": "نسخه بتا"
+  }
+}
+// ===== پایان کد =====

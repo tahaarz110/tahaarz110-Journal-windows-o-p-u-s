@@ -1,0 +1,128 @@
+<!-- ابتدای فایل: UI/Themes/RTLStyles.xaml -->
+<!-- مسیر: /UI/Themes/RTLStyles.xaml -->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- RTL Window Style -->
+    <Style x:Key="RTLWindow" TargetType="Window">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX, Segoe UI"/>
+        <Setter Property="Language" Value="fa-IR"/>
+    </Style>
+
+    <!-- RTL Text Styles -->
+    <Style x:Key="RTLTitle" TargetType="TextBlock">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+    </Style>
+
+    <Style x:Key="RTLSubtitle" TargetType="TextBlock">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+    </Style>
+
+    <Style x:Key="RTLBody" TargetType="TextBlock">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+    </Style>
+
+    <!-- RTL Input Styles -->
+    <Style x:Key="RTLTextBox" TargetType="TextBox">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+    </Style>
+
+    <Style x:Key="RTLComboBox" TargetType="ComboBox">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+    </Style>
+
+    <!-- RTL Grid and Layout -->
+    <Style x:Key="RTLGrid" TargetType="Grid">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+    </Style>
+
+    <Style x:Key="RTLStackPanel" TargetType="StackPanel">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+    </Style>
+
+    <!-- RTL DataGrid -->
+    <Style x:Key="RTLDataGrid" TargetType="DataGrid">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+        <Setter Property="ColumnHeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                    <Setter Property="FontFamily" Value="IRANSansX"/>
+                    <Setter Property="FontWeight" Value="Medium"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="CellStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="TextBlock.TextAlignment" Value="Right"/>
+                    <Setter Property="FontFamily" Value="IRANSansX"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- RTL Menu -->
+    <Style x:Key="RTLMenu" TargetType="Menu">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+    </Style>
+
+    <Style x:Key="RTLMenuItem" TargetType="MenuItem">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+    </Style>
+
+    <!-- RTL TabControl -->
+    <Style x:Key="RTLTabControl" TargetType="TabControl">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+    </Style>
+
+    <Style x:Key="RTLTabItem" TargetType="TabItem">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+    </Style>
+
+    <!-- Number-only TextBox (LTR within RTL) -->
+    <Style x:Key="NumberTextBox" TargetType="TextBox" BasedOn="{StaticResource RTLTextBox}">
+        <Setter Property="FlowDirection" Value="LeftToRight"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+    </Style>
+
+    <!-- Mixed Content (Persian + English) -->
+    <Style x:Key="MixedTextBlock" TargetType="TextBlock">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="IRANSansX, Segoe UI"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+    </Style>
+
+</ResourceDictionary>
+
+<!-- پایان فایل: UI/Themes/RTLStyles.xaml -->

@@ -1,0 +1,435 @@
+<!-- ابتدای فایل: Metadata/forms/trade-form.json -->
+<!-- مسیر: /Metadata/forms/trade-form.json -->
+
+{
+  "formId": "trade-form",
+  "formName": "Trade Entry Form",
+  "formNameFa": "فرم ثبت معامله",
+  "version": "1.0.0",
+  "groups": [
+    {
+      "groupId": "basic-info",
+      "groupName": "Basic Information",
+      "groupNameFa": "اطلاعات پایه",
+      "columns": 3,
+      "order": 1,
+      "fields": [
+        {
+          "fieldName": "symbol",
+          "displayName": "Symbol",
+          "displayNameFa": "نماد",
+          "fieldType": "dropdown",
+          "required": true,
+          "visible": true,
+          "editable": true,
+          "options": [
+            "EURUSD",
+            "GBPUSD",
+            "USDJPY",
+            "USDCHF",
+            "AUDUSD",
+            "USDCAD",
+            "NZDUSD",
+            "XAUUSD",
+            "BTCUSD"
+          ],
+          "defaultValue": "EURUSD",
+          "width": 1
+        },
+        {
+          "fieldName": "direction",
+          "displayName": "Direction",
+          "displayNameFa": "جهت معامله",
+          "fieldType": "radio",
+          "required": true,
+          "visible": true,
+          "editable": true,
+          "options": [
+            { "value": "buy", "label": "Buy", "labelFa": "خرید" },
+            { "value": "sell", "label": "Sell", "labelFa": "فروش" }
+          ],
+          "defaultValue": "buy",
+          "width": 1
+        },
+        {
+          "fieldName": "entryDate",
+          "displayName": "Entry Date",
+          "displayNameFa": "تاریخ ورود",
+          "fieldType": "datetime",
+          "required": true,
+          "visible": true,
+          "editable": true,
+          "defaultValue": "now",
+          "width": 1
+        },
+        {
+          "fieldName": "entryPrice",
+          "displayName": "Entry Price",
+          "displayNameFa": "قیمت ورود",
+          "fieldType": "decimal",
+          "required": true,
+          "visible": true,
+          "editable": true,
+          "validation": {
+            "min": 0,
+            "max": 999999,
+            "decimals": 5
+          },
+          "width": 1
+        },
+        {
+          "fieldName": "volume",
+          "displayName": "Volume (Lot)",
+          "displayNameFa": "حجم (لات)",
+          "fieldType": "decimal",
+          "required": true,
+          "visible": true,
+          "editable": true,
+          "defaultValue": "0.01",
+          "validation": {
+            "min": 0.01,
+            "max": 100,
+            "decimals": 2
+          },
+          "width": 1
+        },
+        {
+          "fieldName": "stopLoss",
+          "displayName": "Stop Loss",
+          "displayNameFa": "حد ضرر",
+          "fieldType": "decimal",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "validation": {
+            "min": 0,
+            "decimals": 5
+          },
+          "width": 1
+        },
+        {
+          "fieldName": "takeProfit",
+          "displayName": "Take Profit",
+          "displayNameFa": "حد سود",
+          "fieldType": "decimal",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "validation": {
+            "min": 0,
+            "decimals": 5
+          },
+          "width": 1
+        },
+        {
+          "fieldName": "platform",
+          "displayName": "Platform",
+          "displayNameFa": "پلتفرم",
+          "fieldType": "dropdown",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "options": ["MT4", "MT5", "cTrader", "TradingView"],
+          "defaultValue": "MT5",
+          "width": 1
+        },
+        {
+          "fieldName": "accountBalance",
+          "displayName": "Account Balance",
+          "displayNameFa": "موجودی حساب",
+          "fieldType": "decimal",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "validation": {
+            "min": 0,
+            "decimals": 2
+          },
+          "width": 1
+        }
+      ]
+    },
+    {
+      "groupId": "strategy-info",
+      "groupName": "Strategy & Analysis",
+      "groupNameFa": "استراتژی و تحلیل",
+      "columns": 2,
+      "order": 2,
+      "fields": [
+        {
+          "fieldName": "strategy",
+          "displayName": "Strategy",
+          "displayNameFa": "استراتژی",
+          "fieldType": "dropdown",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "options": [
+            "Scalping",
+            "Day Trading",
+            "Swing Trading",
+            "Position Trading",
+            "News Trading",
+            "Breakout",
+            "Trend Following",
+            "Range Trading"
+          ],
+          "width": 1
+        },
+        {
+          "fieldName": "timeframe",
+          "displayName": "Timeframe",
+          "displayNameFa": "تایم‌فریم",
+          "fieldType": "dropdown",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "options": ["M1", "M5", "M15", "M30", "H1", "H4", "D1", "W1", "MN"],
+          "defaultValue": "H1",
+          "width": 1
+        },
+        {
+          "fieldName": "entryReason",
+          "displayName": "Entry Reason",
+          "displayNameFa": "دلیل ورود",
+          "fieldType": "textarea",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "rows": 3,
+          "width": 2
+        },
+        {
+          "fieldName": "technicalIndicators",
+          "displayName": "Technical Indicators",
+          "displayNameFa": "اندیکاتورهای تکنیکال",
+          "fieldType": "multiselect",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "options": [
+            "RSI",
+            "MACD",
+            "MA",
+            "EMA",
+            "Bollinger Bands",
+            "Stochastic",
+            "Fibonacci",
+            "Support/Resistance",
+            "Trendline"
+          ],
+          "width": 2
+        }
+      ]
+    },
+    {
+      "groupId": "psychology",
+      "groupName": "Psychology & Emotions",
+      "groupNameFa": "روانشناسی و احساسات",
+      "columns": 2,
+      "order": 3,
+      "fields": [
+        {
+          "fieldName": "entryEmotion",
+          "displayName": "Entry Emotion",
+          "displayNameFa": "احساس هنگام ورود",
+          "fieldType": "dropdown",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "options": [
+            { "value": "confident", "label": "Confident", "labelFa": "مطمئن" },
+            { "value": "anxious", "label": "Anxious", "labelFa": "مضطرب" },
+            { "value": "fearful", "label": "Fearful", "labelFa": "ترسیده" },
+            { "value": "greedy", "label": "Greedy", "labelFa": "طماع" },
+            { "value": "neutral", "label": "Neutral", "labelFa": "خنثی" },
+            { "value": "excited", "label": "Excited", "labelFa": "هیجان‌زده" },
+            { "value": "frustrated", "label": "Frustrated", "labelFa": "ناامید" },
+            { "value": "disciplined", "label": "Disciplined", "labelFa": "منضبط" }
+          ],
+          "width": 1
+        },
+        {
+          "fieldName": "confidenceLevel",
+          "displayName": "Confidence Level",
+          "displayNameFa": "سطح اطمینان",
+          "fieldType": "slider",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "validation": {
+            "min": 1,
+            "max": 10,
+            "step": 1
+          },
+          "defaultValue": 5,
+          "width": 1
+        },
+        {
+          "fieldName": "psychologyNotes",
+          "displayName": "Psychology Notes",
+          "displayNameFa": "یادداشت‌های روانشناسی",
+          "fieldType": "textarea",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "rows": 3,
+          "width": 2
+        }
+      ]
+    },
+    {
+      "groupId": "risk-management",
+      "groupName": "Risk Management",
+      "groupNameFa": "مدیریت ریسک",
+      "columns": 3,
+      "order": 4,
+      "fields": [
+        {
+          "fieldName": "riskAmount",
+          "displayName": "Risk Amount ($)",
+          "displayNameFa": "مقدار ریسک ($)",
+          "fieldType": "decimal",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "formula": "accountBalance * (riskPercent / 100)",
+          "validation": {
+            "min": 0,
+            "decimals": 2
+          },
+          "width": 1
+        },
+        {
+          "fieldName": "riskPercent",
+          "displayName": "Risk Percent (%)",
+          "displayNameFa": "درصد ریسک (%)",
+          "fieldType": "decimal",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "defaultValue": "2",
+          "validation": {
+            "min": 0,
+            "max": 100,
+            "decimals": 2
+          },
+          "width": 1
+        },
+        {
+          "fieldName": "riskRewardRatio",
+          "displayName": "Risk:Reward Ratio",
+          "displayNameFa": "نسبت ریسک به ریوارد",
+          "fieldType": "text",
+          "required": false,
+          "visible": true,
+          "editable": false,
+          "formula": "calculateRiskReward()",
+          "width": 1
+        }
+      ]
+    },
+    {
+      "groupId": "notes",
+      "groupName": "Notes & Lessons",
+      "groupNameFa": "یادداشت‌ها و درس‌ها",
+      "columns": 1,
+      "order": 5,
+      "fields": [
+        {
+          "fieldName": "notes",
+          "displayName": "General Notes",
+          "displayNameFa": "یادداشت‌های عمومی",
+          "fieldType": "richtext",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "rows": 5,
+          "width": 1
+        },
+        {
+          "fieldName": "lessons",
+          "displayName": "Lessons Learned",
+          "displayNameFa": "درس‌های آموخته شده",
+          "fieldType": "textarea",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "rows": 3,
+          "width": 1
+        },
+        {
+          "fieldName": "mistakes",
+          "displayName": "Mistakes to Avoid",
+          "displayNameFa": "اشتباهات برای اجتناب",
+          "fieldType": "textarea",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "rows": 3,
+          "width": 1
+        }
+      ]
+    },
+    {
+      "groupId": "images",
+      "groupName": "Charts & Images",
+      "groupNameFa": "نمودارها و تصاویر",
+      "columns": 1,
+      "order": 6,
+      "fields": [
+        {
+          "fieldName": "entryChart",
+          "displayName": "Entry Chart",
+          "displayNameFa": "نمودار ورود",
+          "fieldType": "image",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "accept": "image/*",
+          "maxSize": 5242880,
+          "width": 1
+        },
+        {
+          "fieldName": "exitChart",
+          "displayName": "Exit Chart",
+          "displayNameFa": "نمودار خروج",
+          "fieldType": "image",
+          "required": false,
+          "visible": true,
+          "editable": true,
+          "accept": "image/*",
+          "maxSize": 5242880,
+          "width": 1
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "actionId": "save",
+      "actionName": "Save",
+      "actionNameFa": "ذخیره",
+      "type": "primary",
+      "icon": "Save",
+      "shortcut": "Ctrl+S"
+    },
+    {
+      "actionId": "saveAndNew",
+      "actionName": "Save & New",
+      "actionNameFa": "ذخیره و جدید",
+      "type": "secondary",
+      "icon": "SaveAdd"
+    },
+    {
+      "actionId": "cancel",
+      "actionName": "Cancel",
+      "actionNameFa": "انصراف",
+      "type": "default",
+      "icon": "Cancel",
+      "shortcut": "Esc"
+    }
+  ]
+}
+
+<!-- پایان فایل: Metadata/forms/trade-form.json -->

@@ -1,0 +1,53 @@
+<!-- مسیر فایل: UI/Styles/RtlStyles.xaml -->
+<!-- ابتدای کد -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- RTL Window Style -->
+    <Style x:Key="RtlWindow" TargetType="Window">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="FontFamily" Value="B Nazanin, Tahoma"/>
+        <Setter Property="Language" Value="fa-IR"/>
+    </Style>
+
+    <!-- RTL TextBox -->
+    <Style x:Key="RtlTextBox" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+        <Setter Property="Language" Value="fa-IR"/>
+    </Style>
+
+    <!-- RTL ComboBox -->
+    <Style x:Key="RtlComboBox" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+    </Style>
+
+    <!-- RTL Label -->
+    <Style x:Key="RtlLabel" TargetType="Label">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+    </Style>
+
+    <!-- RTL TabControl -->
+    <Style x:Key="RtlTabControl" TargetType="TabControl" BasedOn="{StaticResource MaterialDesignTabControl}">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+        <Setter Property="TabStripPlacement" Value="Top"/>
+    </Style>
+
+    <!-- RTL TreeView -->
+    <Style x:Key="RtlTreeView" TargetType="TreeView">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+    </Style>
+
+    <!-- RTL Menu -->
+    <Style x:Key="RtlMenu" TargetType="Menu">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+    </Style>
+
+    <!-- RTL ToolBar -->
+    <Style x:Key="RtlToolBar" TargetType="ToolBar">
+        <Setter Property="FlowDirection" Value="RightToLeft"/>
+    </Style>
+</ResourceDictionary>
+<!-- پایان کد -->

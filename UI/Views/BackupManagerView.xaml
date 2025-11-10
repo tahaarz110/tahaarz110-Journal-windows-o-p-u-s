@@ -1,0 +1,280 @@
+// 📁 UI/Views/BackupManagerView.xaml
+// ===== شروع کد =====
+<UserControl x:Class="TradingJournal.UI.Views.BackupManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <md:ColorZone Grid.Row="0" Mode="PrimaryMid" Padding="16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Text="مدیریت بکاپ و بازیابی" 
+                          Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                          VerticalAlignment="Center"/>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="ایجاد بکاپ جدید"
+                            Click="OnCreateBackup"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="{DynamicResource SecondaryHueMidBrush}"
+                            Margin="0,0,10,0"/>
+                    
+                    <Button Content="بازیابی"
+                            Click="OnRestore"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Margin="0,0,10,0"/>
+                    
+                    <Button Click="OnSettings"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            ToolTip="تنظیمات">
+                        <md:PackIcon Kind="Settings" Width="24" Height="24"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </md:ColorZone>
+        
+        <!-- Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="350"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Backup List -->
+            <Grid Grid.Column="0" Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Search and Filter -->
+                <Grid Grid.Row="0" Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBox Grid.Column="0"
+                            x:Name="SearchBox"
+                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                            md:HintAssist.Hint="جستجو در بکاپ‌ها..."
+                            md:TextFieldAssist.HasClearButton="True"
+                            TextChanged="OnSearchTextChanged"/>
+                    
+                    <ComboBox Grid.Column="1"
+                             x:Name="FilterCombo"
+                             Width="150"
+                             Margin="10,0,0,0"
+                             Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                             md:HintAssist.Hint="فیلتر"
+                             SelectionChanged="OnFilterChanged">
+                        <ComboBoxItem Content="همه" Tag="All" IsSelected="True"/>
+                        <ComboBoxItem Content="دستی" Tag="Manual"/>
+                        <ComboBoxItem Content="خودکار" Tag="Automatic"/>
+                        <ComboBoxItem Content="رمزنگاری شده" Tag="Encrypted"/>
+                    </ComboBox>
+                </Grid>
+                
+                <!-- Backup List -->
+                <DataGrid Grid.Row="1"
+                         x:Name="BackupGrid"
+                         AutoGenerateColumns="False"
+                         CanUserAddRows="False"
+                         SelectionMode="Single"
+                         SelectionChanged="OnBackupSelected">
+                    
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="نام فایل" 
+                                          Binding="{Binding FileName}" 
+                                          Width="2*"/>
+                        
+                        <DataGridTextColumn Header="تاریخ ایجاد" 
+                                          Binding="{Binding CreatedAt, StringFormat='{}{0:yyyy/MM/dd HH:mm}'}" 
+                                          Width="150"/>
+                        
+                        <DataGridTextColumn Header="حجم" 
+                                          Binding="{Binding FileSizeFormatted}" 
+                                          Width="100"/>
+                        
+                        <DataGridTemplateColumn Header="نوع" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <md:Chip Content="{Binding TypeText}" 
+                                               Margin="2"/>
+                                        <md:PackIcon Kind="Lock" 
+                                                   Width="16" Height="16"
+                                                   Foreground="Orange"
+                                                   VerticalAlignment="Center"
+                                                   Margin="4,0,0,0"
+                                                   Visibility="{Binding IsEncrypted, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <DataGridTemplateColumn Header="عملیات" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Click="OnRestoreBackup"
+                                               Tag="{Binding FilePath}"
+                                               Style="{StaticResource MaterialDesignFlatButton}"
+                                               Content="بازیابی"
+                                               Margin="0,0,5,0"/>
+                                        
+                                        <Button Click="OnDeleteBackup"
+                                               Tag="{Binding FilePath}"
+                                               Style="{StaticResource MaterialDesignIconButton}"
+                                               Foreground="Red">
+                                            <md:PackIcon Kind="Delete"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            
+            <!-- Details Panel -->
+            <md:Card Grid.Column="1" Margin="0,16,16,16">
+                <ScrollViewer>
+                    <StackPanel Margin="16">
+                        <TextBlock Text="جزئیات بکاپ"
+                                  Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                  Margin="0,0,0,16"/>
+                        
+                        <Grid x:Name="DetailsPanel" Visibility="Collapsed">
+                            <StackPanel>
+                                <!-- File Name -->
+                                <TextBlock Text="نام فایل:" Foreground="Gray"/>
+                                <TextBlock x:Name="FileNameText" 
+                                         Text="-"
+                                         Margin="0,0,0,10"
+                                         TextWrapping="Wrap"/>
+                                
+                                <!-- Created Date -->
+                                <TextBlock Text="تاریخ ایجاد:" Foreground="Gray"/>
+                                <TextBlock x:Name="CreatedDateText" 
+                                         Text="-"
+                                         Margin="0,0,0,10"/>
+                                
+                                <!-- File Size -->
+                                <TextBlock Text="حجم فایل:" Foreground="Gray"/>
+                                <TextBlock x:Name="FileSizeText" 
+                                         Text="-"
+                                         Margin="0,0,0,10"/>
+                                
+                                <!-- Description -->
+                                <TextBlock Text="توضیحات:" Foreground="Gray"/>
+                                <TextBlock x:Name="DescriptionText" 
+                                         Text="-"
+                                         TextWrapping="Wrap"
+                                         Margin="0,0,0,10"/>
+                                
+                                <!-- Components -->
+                                <TextBlock Text="اجزای بکاپ:" 
+                                         Foreground="Gray"
+                                         Margin="0,10,0,5"/>
+                                
+                                <ItemsControl x:Name="ComponentsList">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                                <md:PackIcon Kind="Check" 
+                                                           Width="16" Height="16"
+                                                           Foreground="Green"
+                                                           Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                
+                                <!-- Statistics -->
+                                <Separator Margin="0,15"/>
+                                
+                                <TextBlock Text="آمار:" 
+                                         Foreground="Gray"
+                                         Margin="0,0,0,5"/>
+                                
+                                <Grid x:Name="StatsGrid">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="تعداد رکورد:" 
+                                                 FontSize="11" 
+                                                 Foreground="Gray"/>
+                                        <TextBlock x:Name="RecordCountText" 
+                                                 Text="-"
+                                                 FontWeight="Bold"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="تعداد تصاویر:" 
+                                                 FontSize="11" 
+                                                 Foreground="Gray"/>
+                                        <TextBlock x:Name="ImageCountText" 
+                                                 Text="-"
+                                                 FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <!-- No Selection -->
+                        <TextBlock x:Name="NoSelectionText"
+                                 Text="یک بکاپ را انتخاب کنید"
+                                 HorizontalAlignment="Center"
+                                 Foreground="Gray"
+                                 Margin="0,50"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </md:Card>
+        </Grid>
+        
+        <!-- Progress Overlay -->
+        <Grid x:Name="ProgressOverlay" 
+              Grid.RowSpan="2" 
+              Background="#CC000000"
+              Visibility="Collapsed">
+            <md:Card Width="400" Height="200">
+                <StackPanel Margin="20">
+                    <TextBlock x:Name="ProgressTitle"
+                             Text="در حال ایجاد بکاپ..."
+                             Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                             Margin="0,0,0,20"/>
+                    
+                    <TextBlock x:Name="ProgressMessage"
+                             Text="لطفاً صبر کنید..."
+                             Margin="0,0,0,10"/>
+                    
+                    <ProgressBar x:Name="ProgressBar"
+                               Height="4"
+                               Margin="0,10"/>
+                    
+                    <TextBlock x:Name="ProgressPercentage"
+                             Text="0%"
+                             HorizontalAlignment="Center"
+                             Margin="0,10"/>
+                </StackPanel>
+            </md:Card>
+        </Grid>
+    </Grid>
+</UserControl>
+// ===== پایان کد =====

@@ -1,0 +1,354 @@
+<!-- ابتدای فایل: UI/Views/TabManagementView.xaml -->
+<!-- مسیر: /UI/Views/TabManagementView.xaml -->
+
+<UserControl x:Class="TradingJournal.UI.Views.TabManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1000"
+             FlowDirection="RightToLeft">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <materialDesign:ColorZone Mode="PrimaryMid" Padding="16" Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" 
+                          Text="مدیریت تب‌ها" 
+                          FontSize="20" 
+                          FontWeight="Bold"
+                          VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button x:Name="AddTabButton"
+                           Style="{StaticResource MaterialDesignRaisedLightButton}"
+                           Margin="8,0"
+                           Click="AddTabButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Margin="0,0,8,0"/>
+                            <TextBlock Text="تب جدید"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:Name="ReorderButton"
+                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Margin="8,0"
+                           Click="ReorderButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Sort" Margin="0,0,8,0"/>
+                            <TextBlock Text="مرتب‌سازی"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:Name="PreviewButton"
+                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                           Margin="8,0"
+                           Click="PreviewButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Eye" Margin="0,0,8,0"/>
+                            <TextBlock Text="پیش‌نمایش"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </materialDesign:ColorZone>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="350"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Tabs List -->
+            <materialDesign:Card Grid.Column="0" Margin="0,0,8,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" 
+                           BorderThickness="0,0,0,1" 
+                           BorderBrush="{DynamicResource MaterialDesignDivider}"
+                           Padding="16">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0"
+                                      Text="تب‌های فعال"
+                                      FontSize="16"
+                                      FontWeight="Medium"
+                                      VerticalAlignment="Center"/>
+
+                            <TextBox Grid.Column="1"
+                                    x:Name="SearchBox"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="جستجو..."
+                                    materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                                    materialDesign:TextFieldAssist.LeadingIcon="Magnify"
+                                    Margin="16,0"
+                                    TextChanged="SearchBox_TextChanged"/>
+
+                            <ToggleButton Grid.Column="2"
+                                         x:Name="ShowInactiveToggle"
+                                         Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                         Content="نمایش غیرفعال‌ها"
+                                         Checked="ShowInactiveToggle_Changed"
+                                         Unchecked="ShowInactiveToggle_Changed"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Tabs ListView -->
+                    <ListBox x:Name="TabsListBox" 
+                            Grid.Row="1"
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            SelectionChanged="TabsListBox_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <materialDesign:Card Margin="8" 
+                                                   Padding="16"
+                                                   UniformCornerRadius="4">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Drag Handle -->
+                                        <materialDesign:PackIcon Grid.Column="0"
+                                                               Kind="DragHorizontalVariant"
+                                                               Opacity="0.5"
+                                                               VerticalAlignment="Center"
+                                                               Cursor="SizeAll"/>
+
+                                        <!-- Icon -->
+                                        <materialDesign:PackIcon Grid.Column="1"
+                                                               Kind="{Binding IconName}"
+                                                               Width="24"
+                                                               Height="24"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="{DynamicResource PrimaryHueMidBrush}"/>
+
+                                        <!-- Info -->
+                                        <StackPanel Grid.Column="2" Margin="16,0">
+                                            <TextBlock Text="{Binding TabNameFa}"
+                                                      FontSize="14"
+                                                      FontWeight="Medium"/>
+                                            <TextBlock Text="{Binding TabKey}"
+                                                      FontSize="12"
+                                                      Opacity="0.6"
+                                                      Margin="0,2,0,0"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                                <materialDesign:Chip Content="{Binding TabType}"
+                                                                   Margin="0,0,8,0"
+                                                                   Height="20"
+                                                                   FontSize="10"/>
+                                                <materialDesign:Chip Content="قابل بستن"
+                                                                   Visibility="{Binding IsCloseable, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                                   Background="Green"
+                                                                   Height="20"
+                                                                   FontSize="10"/>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!-- Status Toggle -->
+                                        <ToggleButton Grid.Column="3"
+                                                     Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                     IsChecked="{Binding IsEnabled}"
+                                                     ToolTip="فعال/غیرفعال"
+                                                     Margin="8,0"/>
+
+                                        <!-- Actions -->
+                                        <StackPanel Grid.Column="4" 
+                                                   Orientation="Horizontal">
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                   Click="EditTab_Click"
+                                                   Tag="{Binding}"
+                                                   ToolTip="ویرایش">
+                                                <materialDesign:PackIcon Kind="Pencil"/>
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                   Click="DuplicateTab_Click"
+                                                   Tag="{Binding}"
+                                                   ToolTip="کپی">
+                                                <materialDesign:PackIcon Kind="ContentCopy"/>
+                                            </Button>
+                                            <Button Style="{StaticResource MaterialDesignIconButton}"
+                                                   Click="DeleteTab_Click"
+                                                   Tag="{Binding}"
+                                                   Foreground="Red"
+                                                   ToolTip="حذف">
+                                                <materialDesign:PackIcon Kind="Delete"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </materialDesign:Card>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Tab Properties Panel -->
+            <materialDesign:Card Grid.Column="1" 
+                               Margin="8,0,0,0"
+                               x:Name="PropertiesCard"
+                               Visibility="Collapsed">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Border Grid.Row="0"
+                           BorderThickness="0,0,0,1"
+                           BorderBrush="{DynamicResource MaterialDesignDivider}"
+                           Padding="16">
+                        <TextBlock Text="خصوصیات تب"
+                                  FontSize="16"
+                                  FontWeight="Medium"/>
+                    </Border>
+
+                    <!-- Properties -->
+                    <ScrollViewer Grid.Row="1" 
+                                 VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="16">
+                            <!-- Tab Key -->
+                            <TextBox x:Name="TabKeyTextBox"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="کلید تب"
+                                    IsReadOnly="True"
+                                    Margin="0,8"/>
+
+                            <!-- Tab Name -->
+                            <TextBox x:Name="TabNameTextBox"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="نام انگلیسی"
+                                    Margin="0,8"/>
+
+                            <!-- Tab Name Farsi -->
+                            <TextBox x:Name="TabNameFaTextBox"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="نام فارسی"
+                                    Margin="0,8"/>
+
+                            <!-- Tab Type -->
+                            <ComboBox x:Name="TabTypeComboBox"
+                                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                     materialDesign:HintAssist.Hint="نوع تب"
+                                     Margin="0,8">
+                                <ComboBoxItem Content="لیست معاملات" Tag="TradeList"/>
+                                <ComboBoxItem Content="فرم ثبت" Tag="TradeForm"/>
+                                <ComboBoxItem Content="داشبورد" Tag="Dashboard"/>
+                                <ComboBoxItem Content="گزارش" Tag="Report"/>
+                                <ComboBoxItem Content="تحلیل" Tag="Analysis"/>
+                                <ComboBoxItem Content="تنظیمات" Tag="Settings"/>
+                                <ComboBoxItem Content="پلاگین" Tag="Plugin"/>
+                                <ComboBoxItem Content="سفارشی" Tag="Custom"/>
+                            </ComboBox>
+
+                            <!-- Icon -->
+                            <ComboBox x:Name="IconComboBox"
+                                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                     materialDesign:HintAssist.Hint="آیکون"
+                                     Margin="0,8">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="{Binding}" 
+                                                                   Margin="0,0,8,0"/>
+                                            <TextBlock Text="{Binding}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <!-- Order Index -->
+                            <TextBox x:Name="OrderIndexTextBox"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="ترتیب نمایش"
+                                    Margin="0,8"/>
+
+                            <!-- Checkboxes -->
+                            <CheckBox x:Name="IsVisibleCheckBox"
+                                     Content="قابل نمایش"
+                                     Margin="0,8"/>
+
+                            <CheckBox x:Name="IsEnabledCheckBox"
+                                     Content="فعال"
+                                     Margin="0,8"/>
+
+                            <CheckBox x:Name="IsCloseableCheckBox"
+                                     Content="قابل بستن"
+                                     Margin="0,8"/>
+
+                            <!-- Permissions -->
+                            <Expander Header="مجوزها" Margin="0,8">
+                                <StackPanel Margin="8">
+                                    <CheckBox Content="مشاهده" IsChecked="True"/>
+                                    <CheckBox Content="ایجاد" Margin="0,4"/>
+                                    <CheckBox Content="ویرایش" Margin="0,4"/>
+                                    <CheckBox Content="حذف" Margin="0,4"/>
+                                </StackPanel>
+                            </Expander>
+
+                            <!-- Configuration -->
+                            <Expander Header="تنظیمات پیشرفته" Margin="0,8">
+                                <TextBox x:Name="ConfigurationTextBox"
+                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                        materialDesign:HintAssist.Hint="JSON Configuration"
+                                        TextWrapping="Wrap"
+                                        AcceptsReturn="True"
+                                        MinHeight="100"
+                                        FontFamily="Consolas"
+                                        Margin="8"/>
+                            </Expander>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Actions -->
+                    <Border Grid.Row="2"
+                           BorderThickness="0,1,0,0"
+                           BorderBrush="{DynamicResource MaterialDesignDivider}"
+                           Padding="16">
+                        <StackPanel Orientation="Horizontal"
+                                   HorizontalAlignment="Right">
+                            <Button Content="انصراف"
+                                   Style="{StaticResource MaterialDesignOutlinedButton}"
+                                   Margin="0,0,8,0"
+                                   Click="CancelEdit_Click"/>
+                            <Button Content="ذخیره"
+                                   Style="{StaticResource MaterialDesignRaisedButton}"
+                                   Click="SaveTab_Click"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+    </Grid>
+</UserControl>
+
+<!-- پایان فایل: UI/Views/TabManagementView.xaml -->

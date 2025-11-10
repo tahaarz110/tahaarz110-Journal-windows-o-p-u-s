@@ -1,0 +1,51 @@
+<!-- مسیر فایل: UI/Resources/Icons.xaml -->
+<!-- ابتدای کد -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- App Icons -->
+    <DrawingImage x:Key="AppIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="#FF2196F3">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry Figures="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6L13.5,9.5L17.5,10L14.8,12.8L15.5,16.5L12,14.5L8.5,16.5L9.2,12.8L6.5,10L10.5,9.5L12,6Z"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <!-- Trade Icons -->
+    <PathGeometry x:Key="BuyIcon" Figures="M5,20V12H2L12,3L22,12H19V20H15V14H9V20H5Z"/>
+    <PathGeometry x:Key="SellIcon" Figures="M19,4V12H22L12,21L2,12H5V4H9V10H15V4H19Z"/>
+    
+    <!-- Chart Icons -->
+    <PathGeometry x:Key="ChartIcon" Figures="M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z"/>
+    <PathGeometry x:Key="CandlestickIcon" Figures="M9,5V9H15V5M12,0L7,5V13A2,2 0 0,0 9,15H15A2,2 0 0,0 17,13V5M9,19H15V23H9V19Z"/>
+    
+    <!-- Action Icons -->
+    <PathGeometry x:Key="AddIcon" Figures="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
+    <PathGeometry x:Key="EditIcon" Figures="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
+    <PathGeometry x:Key="DeleteIcon" Figures="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+    
+    <!-- Status Icons -->
+    <PathGeometry x:Key="SuccessIcon" Figures="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
+    <PathGeometry x:Key="ErrorIcon" Figures="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
+    <PathGeometry x:Key="WarningIcon" Figures="M13,13H11V7H13M13,17H11V15H13M12,2L1,21H23L12,2Z"/>
+    
+    <!-- Navigation Icons -->
+    <PathGeometry x:Key="HomeIcon" Figures="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/>
+    <PathGeometry x:Key="DashboardIcon" Figures="M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z"/>
+    <PathGeometry x:Key="ReportIcon" Figures="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+    
+    <!-- Currency Icons -->
+    <PathGeometry x:Key="DollarIcon" Figures="M7,15H9C9,16.08 10.37,17 12,17C13.63,17 15,16.08 15,15C15,13.9 13.96,13.5 11.76,12.97C9.64,12.44 7,11.78 7,9C7,7.21 8.47,5.69 10.5,5.18V3H13.5V5.18C15.53,5.69 17,7.21 17,9H15C15,7.92 13.63,7 12,7C10.37,7 9,7.92 9,9C9,10.1 10.04,10.5 12.24,11.03C14.36,11.56 17,12.22 17,15C17,16.79 15.53,18.31 13.5,18.82V21H10.5V18.82C8.47,18.31 7,16.79 7,15Z"/>
+    <PathGeometry x:Key="EuroIcon" Figures="M15,18.5A3.5,3.5 0 0,1 11.5,15H11.07C10.5,14.61 10,13.74 9.7,12.8L14,12.06L14.47,10.13L9.41,11L9.35,10.73C9.35,10.15 9.38,9.62 9.44,9.14L15,8.14L15.56,6.14L9.75,7.25C10.1,6.42 10.58,5.91 11,5.5H11.5A3.5,3.5 0 0,1 15,9H17A5.5,5.5 0 0,0 11.5,3.5H11.03C8.25,3.5 6,6.5 6,10.25C6,14 8.25,17 11.03,17H11.5A5.5,5.5 0 0,0 17,11.5H15V18.5Z"/>
+    
+    <!-- File Icons -->
+    <PathGeometry x:Key="ImportIcon" Figures="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,19L8,15H10.5V11H13.5V15H16L12,19Z"/>
+    <PathGeometry x:Key="ExportIcon" Figures="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,11L8,15H10.5V19H13.5V15H16L12,11Z"/>
+    <PathGeometry x:Key="BackupIcon" Figures="M19.35,10.04C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.04C2.34,8.36 0,10.91 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.04M14,13V17H10V13H7L12,8L17,13H14Z"/>
+</ResourceDictionary>
+<!-- پایان کد -->

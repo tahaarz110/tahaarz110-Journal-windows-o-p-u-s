@@ -1,0 +1,588 @@
+<!-- ابتدای فایل: UI/Views/DashboardDesigner.xaml - بخش 1 -->
+<!-- مسیر: /UI/Views/DashboardDesigner.xaml -->
+
+<UserControl x:Class="TradingJournal.UI.Views.DashboardDesigner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1400"
+             FlowDirection="RightToLeft">
+    
+    <UserControl.Resources>
+        <!-- Grid Cell Style -->
+        <Style x:Key="GridCellStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#30000000"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="MinHeight" Value="100"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#10000000"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Widget Container Style -->
+        <Style x:Key="WidgetContainerStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Margin" Value="4"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource SecondaryHueMidBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <materialDesign:ColorZone Grid.Row="0" 
+                                 Mode="PrimaryMid" 
+                                 Padding="16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" 
+                          Text="طراح داشبورد" 
+                          FontSize="20" 
+                          FontWeight="Bold"
+                          VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="1"
+                           Orientation="Horizontal"
+                           HorizontalAlignment="Center">
+                    <ComboBox x:Name="DashboardSelector"
+                             Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                             materialDesign:HintAssist.Hint="انتخاب داشبورد"
+                             Width="250"
+                             Margin="16,0"
+                             SelectionChanged="DashboardSelector_SelectionChanged"/>
+                    
+                    <Button x:Name="NewDashboardButton"
+                           Style="{StaticResource MaterialDesignFlatButton}"
+                           Click="NewDashboardButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Margin="0,0,4,0"/>
+                            <TextBlock Text="جدید"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" 
+                           Orientation="Horizontal">
+                    <Button x:Name="GridSettingsButton"
+                           Style="{StaticResource MaterialDesignFlatButton}"
+                           Margin="8,0"
+                           Click="GridSettingsButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Grid" Margin="0,0,8,0"/>
+                            <TextBlock Text="تنظیمات شبکه"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:Name="PreviewButton"
+                           Style="{StaticResource MaterialDesignFlatButton}"
+                           Margin="8,0"
+                           Click="PreviewButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Eye" Margin="0,0,8,0"/>
+                            <TextBlock Text="پیش‌نمایش"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:Name="SaveButton"
+                           Style="{StaticResource MaterialDesignRaisedLightButton}"
+                           Margin="8,0"
+                           Click="SaveButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ContentSave" Margin="0,0,8,0"/>
+                            <TextBlock Text="ذخیره"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </materialDesign:ColorZone>
+
+        <!-- Toolbar -->
+        <ToolBar Grid.Row="1" 
+                Height="48"
+                ToolBarTray.IsLocked="True">
+            <ToggleButton x:Name="SelectModeButton"
+                         IsChecked="True"
+                         Style="{StaticResource MaterialDesignActionToggleButton}"
+                         ToolTip="حالت انتخاب"
+                         Checked="ModeButton_Checked">
+                <materialDesign:PackIcon Kind="CursorDefault"/>
+            </ToggleButton>
+            
+            <ToggleButton x:Name="MoveModeButton"
+                         Style="{StaticResource MaterialDesignActionToggleButton}"
+                         ToolTip="حالت جابجایی"
+                         Checked="ModeButton_Checked">
+                <materialDesign:PackIcon Kind="MoveResize"/>
+            </ToggleButton>
+            
+            <ToggleButton x:Name="ResizeModeButton"
+                         Style="{StaticResource MaterialDesignActionToggleButton}"
+                         ToolTip="حالت تغییر اندازه"
+                         Checked="ModeButton_Checked">
+                <materialDesign:PackIcon Kind="Resize"/>
+            </ToggleButton>
+            
+            <Separator/>
+            
+            <Button x:Name="AlignLeftButton"
+                   Style="{StaticResource MaterialDesignToolButton}"
+                   ToolTip="چیدمان چپ"
+                   Click="AlignButton_Click">
+                <materialDesign:PackIcon Kind="FormatAlignLeft"/>
+            </Button>
+            
+            <Button x:Name="AlignCenterButton"
+                   Style="{StaticResource MaterialDesignToolButton}"
+                   ToolTip="چیدمان وسط"
+                   Click="AlignButton_Click">
+                <materialDesign:PackIcon Kind="FormatAlignCenter"/>
+            </Button>
+            
+            <Button x:Name="AlignRightButton"
+                   Style="{StaticResource MaterialDesignToolButton}"
+                   ToolTip="چیدمان راست"
+                   Click="AlignButton_Click">
+                <materialDesign:PackIcon Kind="FormatAlignRight"/>
+            </Button>
+            
+            <Separator/>
+            
+            <Button x:Name="DistributeHorizontalButton"
+                   Style="{StaticResource MaterialDesignToolButton}"
+                   ToolTip="توزیع افقی"
+                   Click="DistributeButton_Click">
+                <materialDesign:PackIcon Kind="DistributeHorizontalCenter"/>
+            </Button>
+            
+            <Button x:Name="DistributeVerticalButton"
+                   Style="{StaticResource MaterialDesignToolButton}"
+                   ToolTip="توزیع عمودی"
+                   Click="DistributeButton_Click">
+                <materialDesign:PackIcon Kind="DistributeVerticalCenter"/>
+            </Button>
+            
+            <Separator/>
+            
+            <Button x:Name="DeleteWidgetButton"
+                   Style="{StaticResource MaterialDesignToolButton}"
+                   ToolTip="حذف ویجت"
+                   Click="DeleteWidgetButton_Click">
+                <materialDesign:PackIcon Kind="Delete" Foreground="Red"/>
+            </Button>
+            
+            <Separator/>
+            
+            <TextBlock Text="تعداد ستون:" 
+                      VerticalAlignment="Center"
+                      Margin="8,0"/>
+            
+            <ComboBox x:Name="ColumnsComboBox"
+                     Width="60"
+                     SelectedIndex="2"
+                     SelectionChanged="GridSize_Changed">
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="3"/>
+                <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="5"/>
+                <ComboBoxItem Content="6"/>
+            </ComboBox>
+            
+            <TextBlock Text="تعداد ردیف:" 
+                      VerticalAlignment="Center"
+                      Margin="8,0"/>
+            
+            <ComboBox x:Name="RowsComboBox"
+                     Width="60"
+                     SelectedIndex="2"
+                     SelectionChanged="GridSize_Changed">
+                <ComboBoxItem Content="2"/>
+                <ComboBoxItem Content="3"/>
+                <ComboBoxItem Content="4"/>
+                <ComboBoxItem Content="5"/>
+                <ComboBoxItem Content="6"/>
+            </ComboBox>
+            
+            <Separator/>
+            
+            <CheckBox x:Name="ShowGridCheckBox"
+                     Content="نمایش شبکه"
+                     IsChecked="True"
+                     Checked="ShowGridCheckBox_Changed"
+                     Unchecked="ShowGridCheckBox_Changed"
+                     VerticalAlignment="Center"
+                     Margin="8,0"/>
+            
+            <CheckBox x:Name="SnapToGridCheckBox"
+                     Content="چسبیدن به شبکه"
+                     IsChecked="True"
+                     VerticalAlignment="Center"
+                     Margin="8,0"/>
+        </ToolBar>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Widget Library Panel -->
+            <materialDesign:Card Grid.Column="0" 
+                               Margin="16,16,8,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                              Text="کتابخانه ویجت‌ها"
+                              FontSize="16"
+                              FontWeight="Medium"
+                              Margin="16"/>
+
+                    <ScrollViewer Grid.Row="1" 
+                                 VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="WidgetLibraryItems">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Style="{StaticResource WidgetContainerStyle}"
+                                           Height="100"
+                                           Margin="8"
+                                           Cursor="Hand"
+                                           PreviewMouseLeftButtonDown="LibraryWidget_PreviewMouseLeftButtonDown"
+                                           Tag="{Binding}">
+                                        <Grid>
+                                            <materialDesign:PackIcon Kind="{Binding Icon}"
+                                                                   Width="32"
+                                                                   Height="32"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Opacity="0.5"/>
+                                            <TextBlock Text="{Binding Name}"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Bottom"
+                                                     Margin="0,0,0,8"
+                                                     FontSize="12"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </materialDesign:Card>
+<!-- ابتدای بخش 2 فایل: UI/Views/DashboardDesigner.xaml -->
+<!-- ادامه از بخش 1 -->
+
+            <!-- Design Canvas -->
+            <materialDesign:Card Grid.Column="1" 
+                               Margin="8,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                           Background="{DynamicResource PrimaryHueLightBrush}"
+                           Padding="8">
+                        <TextBlock x:Name="DashboardNameText"
+                                  Text="داشبورد جدید"
+                                  FontSize="14"
+                                  FontWeight="Medium"/>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1" 
+                                 HorizontalScrollBarVisibility="Auto"
+                                 VerticalScrollBarVisibility="Auto">
+                        <Grid x:Name="DesignCanvas"
+                             Background="White"
+                             MinWidth="800"
+                             MinHeight="600"
+                             AllowDrop="True"
+                             Drop="DesignCanvas_Drop"
+                             DragOver="DesignCanvas_DragOver">
+                            
+                            <!-- Dynamic Grid will be created in code-behind -->
+                            <Canvas x:Name="WidgetCanvas" 
+                                   IsHitTestVisible="True">
+                                <!-- Widgets will be added here dynamically -->
+                            </Canvas>
+                            
+                            <!-- Grid Lines Overlay -->
+                            <Canvas x:Name="GridLinesCanvas"
+                                   IsHitTestVisible="False">
+                                <!-- Grid lines will be drawn here -->
+                            </Canvas>
+                            
+                            <!-- Selection Rectangle -->
+                            <Canvas x:Name="SelectionCanvas"
+                                   IsHitTestVisible="False">
+                                <Rectangle x:Name="SelectionRectangle"
+                                          Stroke="{DynamicResource SecondaryHueMidBrush}"
+                                          StrokeThickness="2"
+                                          StrokeDashArray="2 2"
+                                          Fill="#20000000"
+                                          Visibility="Collapsed"/>
+                            </Canvas>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Properties Panel -->
+            <materialDesign:Card Grid.Column="2" 
+                               Margin="8,16,16,16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                           BorderThickness="0,0,0,1"
+                           BorderBrush="{DynamicResource MaterialDesignDivider}"
+                           Padding="16">
+                        <Grid>
+                            <TextBlock Text="خصوصیات"
+                                      FontSize="16"
+                                      FontWeight="Medium"/>
+                            
+                            <ToggleButton x:Name="PropertiesPanelToggle"
+                                         Style="{StaticResource MaterialDesignIconToggleButton}"
+                                         HorizontalAlignment="Right"
+                                         IsChecked="True">
+                                <materialDesign:PackIcon Kind="ChevronUp"/>
+                            </ToggleButton>
+                        </Grid>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1" 
+                                 x:Name="PropertiesScrollViewer"
+                                 VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="16">
+                            <!-- Dashboard Properties -->
+                            <Expander Header="تنظیمات داشبورد" 
+                                     IsExpanded="True">
+                                <StackPanel Margin="8">
+                                    <TextBox x:Name="DashboardIdTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="شناسه داشبورد"
+                                            IsReadOnly="True"
+                                            Margin="0,8"/>
+                                    
+                                    <TextBox x:Name="DashboardNameTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="نام داشبورد"
+                                            Margin="0,8"/>
+                                    
+                                    <TextBox x:Name="DashboardNameFaTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="نام فارسی"
+                                            Margin="0,8"/>
+                                    
+                                    <TextBox x:Name="DashboardDescriptionTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="توضیحات"
+                                            TextWrapping="Wrap"
+                                            MinHeight="60"
+                                            Margin="0,8"/>
+                                    
+                                    <CheckBox x:Name="AutoRefreshCheckBox"
+                                             Content="بازخوانی خودکار"
+                                             Margin="0,8"/>
+                                    
+                                    <TextBox x:Name="RefreshIntervalTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="فاصله بازخوانی (ثانیه)"
+                                            IsEnabled="{Binding ElementName=AutoRefreshCheckBox, Path=IsChecked}"
+                                            Margin="0,8"/>
+                                </StackPanel>
+                            </Expander>
+
+                            <!-- Selected Widget Properties -->
+                            <Expander Header="ویجت انتخاب شده" 
+                                     Margin="0,8"
+                                     x:Name="SelectedWidgetExpander"
+                                     Visibility="Collapsed">
+                                <StackPanel Margin="8">
+                                    <TextBox x:Name="WidgetIdTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="شناسه ویجت"
+                                            IsReadOnly="True"
+                                            Margin="0,8"/>
+                                    
+                                    <TextBox x:Name="WidgetNameTextBox"
+                                            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                            materialDesign:HintAssist.Hint="نام ویجت"
+                                            Margin="0,8"/>
+                                    
+                                    <ComboBox x:Name="WidgetTypeComboBox"
+                                             Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                             materialDesign:HintAssist.Hint="نوع ویجت"
+                                             IsEnabled="False"
+                                             Margin="0,8">
+                                        <ComboBoxItem Content="KPI"/>
+                                        <ComboBoxItem Content="نمودار"/>
+                                        <ComboBoxItem Content="جدول"/>
+                                        <ComboBoxItem Content="کارت"/>
+                                    </ComboBox>
+                                    
+                                    <!-- Position -->
+                                    <Grid Margin="0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        
+                                        <TextBox Grid.Row="0" Grid.Column="0"
+                                                x:Name="WidgetRowTextBox"
+                                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                materialDesign:HintAssist.Hint="ردیف"
+                                                Margin="0,0,4,8"/>
+                                        
+                                        <TextBox Grid.Row="0" Grid.Column="1"
+                                                x:Name="WidgetColumnTextBox"
+                                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                materialDesign:HintAssist.Hint="ستون"
+                                                Margin="4,0,0,8"/>
+                                        
+                                        <TextBox Grid.Row="1" Grid.Column="0"
+                                                x:Name="WidgetRowSpanTextBox"
+                                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                materialDesign:HintAssist.Hint="تعداد ردیف"
+                                                Margin="0,0,4,0"/>
+                                        
+                                        <TextBox Grid.Row="1" Grid.Column="1"
+                                                x:Name="WidgetColumnSpanTextBox"
+                                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                                materialDesign:HintAssist.Hint="تعداد ستون"
+                                                Margin="4,0,0,0"/>
+                                    </Grid>
+                                    
+                                    <Button Content="ویرایش داده ویجت"
+                                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                                           Margin="0,8"
+                                           Click="EditWidgetData_Click"/>
+                                    
+                                    <Button Content="حذف ویجت"
+                                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                                           Foreground="Red"
+                                           BorderBrush="Red"
+                                           Margin="0,8"
+                                           Click="RemoveWidget_Click"/>
+                                </StackPanel>
+                            </Expander>
+
+                            <!-- Layout Templates -->
+                            <Expander Header="قالب‌های آماده" Margin="0,8">
+                                <ItemsControl x:Name="LayoutTemplates">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource MaterialDesignOutlinedButton}"
+                                                   Content="{Binding Name}"
+                                                   Tag="{Binding}"
+                                                   Click="ApplyTemplate_Click"
+                                                   Margin="0,4"
+                                                   HorizontalAlignment="Stretch"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Expander>
+
+                            <!-- Export/Import -->
+                            <Expander Header="ورود/خروج" Margin="0,8">
+                                <StackPanel Margin="8">
+                                    <Button Content="خروجی JSON"
+                                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                                           Click="ExportJson_Click"
+                                           Margin="0,4"/>
+                                    
+                                    <Button Content="ورود از JSON"
+                                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                                           Click="ImportJson_Click"
+                                           Margin="0,4"/>
+                                    
+                                    <Button Content="ذخیره به عنوان قالب"
+                                           Style="{StaticResource MaterialDesignOutlinedButton}"
+                                           Click="SaveAsTemplate_Click"
+                                           Margin="0,4"/>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="3">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+
+            <StatusBarItem Grid.Column="0">
+                <TextBlock x:Name="ModeText" Text="حالت: انتخاب"/>
+            </StatusBarItem>
+
+            <Separator Grid.Column="1"/>
+
+            <StatusBarItem Grid.Column="2">
+                <TextBlock x:Name="StatusText" Text="آماده"/>
+            </StatusBarItem>
+
+            <StatusBarItem Grid.Column="3">
+                <TextBlock x:Name="WidgetCountText" Text="تعداد ویجت: 0"/>
+            </StatusBarItem>
+
+            <Separator Grid.Column="4"/>
+
+            <StatusBarItem Grid.Column="5">
+                <TextBlock x:Name="CursorPositionText" Text="X: 0, Y: 0"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</UserControl>
+
+<!-- پایان فایل: UI/Views/DashboardDesigner.xaml -->

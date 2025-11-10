@@ -1,0 +1,251 @@
+<!-- ابتدای فایل: UI/Dialogs/FieldEditDialog.xaml -->
+<!-- مسیر: /UI/Dialogs/FieldEditDialog.xaml -->
+
+<Window x:Class="TradingJournal.UI.Dialogs.FieldEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="ویرایش فیلد"
+        Height="600" Width="500"
+        WindowStartupLocation="CenterOwner"
+        FlowDirection="RightToLeft"
+        FontFamily="{StaticResource IranSans}"
+        TextElement.FontSize="14"
+        TextElement.FontWeight="Regular"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <materialDesign:ColorZone Mode="PrimaryMid" 
+                                 Padding="16" 
+                                 Grid.Row="0">
+            <TextBlock x:Name="HeaderText"
+                      Text="افزودن فیلد جدید"
+                      FontSize="18"
+                      FontWeight="Bold"/>
+        </materialDesign:ColorZone>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" 
+                     VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="16">
+                <!-- Basic Information Group -->
+                <materialDesign:Card Padding="16" Margin="0,8">
+                    <StackPanel>
+                        <TextBlock Text="اطلاعات پایه"
+                                  FontSize="16"
+                                  FontWeight="Medium"
+                                  Margin="0,0,0,16"/>
+                        
+                        <!-- Field Name -->
+                        <TextBox x:Name="FieldNameTextBox"
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="نام فیلد (انگلیسی) *"
+                                Margin="0,8"/>
+                        
+                        <!-- Display Name -->
+                        <TextBox x:Name="DisplayNameTextBox"
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="نام نمایشی (انگلیسی)"
+                                Margin="0,8"/>
+                        
+                        <!-- Display Name Farsi -->
+                        <TextBox x:Name="DisplayNameFaTextBox"
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="نام نمایشی (فارسی)"
+                                Margin="0,8"/>
+                        
+                        <!-- Field Type -->
+                        <ComboBox x:Name="FieldTypeComboBox"
+                                 Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                 materialDesign:HintAssist.Hint="نوع فیلد *"
+                                 Margin="0,8"
+                                 SelectionChanged="FieldTypeComboBox_SelectionChanged">
+                            <ComboBoxItem Content="متن" Tag="Text"/>
+                            <ComboBoxItem Content="عدد" Tag="Number"/>
+                            <ComboBoxItem Content="اعشاری" Tag="Decimal"/>
+                            <ComboBoxItem Content="تاریخ" Tag="Date"/>
+                            <ComboBoxItem Content="تاریخ و زمان" Tag="DateTime"/>
+                            <ComboBoxItem Content="بله/خیر" Tag="Boolean"/>
+                            <ComboBoxItem Content="لیست کشویی" Tag="Dropdown"/>
+                            <ComboBoxItem Content="رادیویی" Tag="Radio"/>
+                            <ComboBoxItem Content="چک باکس" Tag="Checkbox"/>
+                            <ComboBoxItem Content="متن چندخطی" Tag="TextArea"/>
+                            <ComboBoxItem Content="تصویر" Tag="Image"/>
+                            <ComboBoxItem Content="فایل" Tag="File"/>
+                            <ComboBoxItem Content="فرمول" Tag="Formula"/>
+                        </ComboBox>
+                        
+                        <!-- Group -->
+                        <ComboBox x:Name="GroupComboBox"
+                                 Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                 materialDesign:HintAssist.Hint="گروه"
+                                 Margin="0,8"
+                                 IsEditable="True">
+                            <ComboBoxItem Content="فیلدهای پایه"/>
+                            <ComboBoxItem Content="استراتژی و تحلیل"/>
+                            <ComboBoxItem Content="روانشناسی"/>
+                            <ComboBoxItem Content="مدیریت ریسک"/>
+                            <ComboBoxItem Content="فیلدهای سفارشی"/>
+                        </ComboBox>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Field Settings Group -->
+                <materialDesign:Card Padding="16" Margin="0,8">
+                    <StackPanel>
+                        <TextBlock Text="تنظیمات فیلد"
+                                  FontSize="16"
+                                  FontWeight="Medium"
+                                  Margin="0,0,0,16"/>
+                        
+                        <!-- Default Value -->
+                        <TextBox x:Name="DefaultValueTextBox"
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="مقدار پیش‌فرض"
+                                Margin="0,8"/>
+                        
+                        <!-- Order Index -->
+                        <TextBox x:Name="OrderIndexTextBox"
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="ترتیب نمایش"
+                                Margin="0,8"/>
+                        
+                        <!-- Checkboxes -->
+                        <CheckBox x:Name="IsRequiredCheckBox"
+                                 Content="فیلد اجباری"
+                                 Margin="0,8"/>
+                        
+                        <CheckBox x:Name="IsVisibleCheckBox"
+                                 Content="قابل نمایش"
+                                 IsChecked="True"
+                                 Margin="0,8"/>
+                        
+                        <CheckBox x:Name="IsEditableCheckBox"
+                                 Content="قابل ویرایش"
+                                 IsChecked="True"
+                                 Margin="0,8"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Options Group (for Dropdown/Radio) -->
+                <materialDesign:Card x:Name="OptionsCard" 
+                                   Padding="16" 
+                                   Margin="0,8"
+                                   Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="گزینه‌ها"
+                                  FontSize="16"
+                                  FontWeight="Medium"
+                                  Margin="0,0,0,16"/>
+                        
+                        <TextBox x:Name="OptionsTextBox"
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="گزینه‌ها (هر خط یک گزینه)"
+                                TextWrapping="Wrap"
+                                AcceptsReturn="True"
+                                MinHeight="100"
+                                Margin="0,8"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Validation Group -->
+                <materialDesign:Card x:Name="ValidationCard"
+                                   Padding="16" 
+                                   Margin="0,8">
+                    <StackPanel>
+                        <TextBlock Text="اعتبارسنجی"
+                                  FontSize="16"
+                                  FontWeight="Medium"
+                                  Margin="0,0,0,16"/>
+                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- Min Value -->
+                            <TextBox x:Name="MinValueTextBox"
+                                    Grid.Column="0"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="حداقل مقدار"
+                                    Margin="0,8,4,8"/>
+                            
+                            <!-- Max Value -->
+                            <TextBox x:Name="MaxValueTextBox"
+                                    Grid.Column="1"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="حداکثر مقدار"
+                                    Margin="4,8,0,8"/>
+                        </Grid>
+                        
+                        <!-- Pattern -->
+                        <TextBox x:Name="PatternTextBox"
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="الگوی Regex"
+                                Margin="0,8"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Formula Group -->
+                <materialDesign:Card x:Name="FormulaCard"
+                                   Padding="16" 
+                                   Margin="0,8"
+                                   Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="فرمول محاسباتی"
+                                  FontSize="16"
+                                  FontWeight="Medium"
+                                  Margin="0,0,0,16"/>
+                        
+                        <TextBox x:Name="FormulaTextBox"
+                                Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                materialDesign:HintAssist.Hint="فرمول (مثال: volume * entryPrice)"
+                                TextWrapping="Wrap"
+                                MinHeight="60"
+                                Margin="0,8"/>
+                    </StackPanel>
+                </materialDesign:Card>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer Buttons -->
+        <Border Grid.Row="2"
+               BorderThickness="0,1,0,0"
+               BorderBrush="{DynamicResource MaterialDesignDivider}">
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Column="1"
+                       Content="انصراف"
+                       Style="{StaticResource MaterialDesignOutlinedButton}"
+                       Margin="0,0,8,0"
+                       Width="100"
+                       Click="CancelButton_Click"/>
+                
+                <Button Grid.Column="2"
+                       Content="ذخیره"
+                       Style="{StaticResource MaterialDesignRaisedButton}"
+                       Width="100"
+                       Click="SaveButton_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+
+<!-- پایان فایل: UI/Dialogs/FieldEditDialog.xaml -->

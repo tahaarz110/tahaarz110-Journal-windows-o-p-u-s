@@ -1,0 +1,232 @@
+<!-- مسیر فایل: UI/Views/PluginManagerView.xaml -->
+<!-- ابتدای کد -->
+<UserControl x:Class="TradingJournal.UI.Views.PluginManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             FlowDirection="RightToLeft">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <md:Card Grid.Row="0" Margin="8">
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="مدیریت پلاگین‌ها"
+                           Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                           VerticalAlignment="Center"/>
+
+                <!-- مسیر فایل: UI/Views/PluginManagerView.xaml -->
+                <!-- بخش اصلاح شده - خط 28 تا 40 -->
+              <Button Click="OnInstallPlugin"
+             Style="{StaticResource MaterialDesignRaisedButton}"
+              Margin="0,0,8,0">
+              <StackPanel Orientation="Horizontal">
+             <md:PackIcon Kind="Plus" VerticalAlignment="Center" Margin="0,0,4,0"/>
+              <TextBlock Text="نصب پلاگین" VerticalAlignment="Center"/>
+              </StackPanel>
+             </Button>
+                  <!-- پایان بخش اصلاح شده -->
+                    
+                    <Button Click="OnRefresh"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            ToolTip="بازخوانی">
+                        <md:PackIcon Kind="Refresh"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </md:Card>
+
+        <!-- Plugins List -->
+        <md:Card Grid.Row="1" Margin="8">
+            <DataGrid x:Name="PluginsList"
+                      ItemsSource="{Binding Plugins}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      SelectionMode="Single"
+                      Style="{StaticResource MaterialDesignDataGrid}">
+                <DataGrid.Columns>
+                    <!-- Status -->
+                    <DataGridTemplateColumn Header="وضعیت" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Ellipse Width="12" Height="12"
+                                         HorizontalAlignment="Center">
+                                    <Ellipse.Fill>
+                                        <SolidColorBrush Color="{Binding StatusColor}"/>
+                                    </Ellipse.Fill>
+                                    <Ellipse.ToolTip>
+                                        <TextBlock Text="{Binding Status}"/>
+                                    </Ellipse.ToolTip>
+                                </Ellipse>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Icon -->
+                    <DataGridTemplateColumn Header="" Width="40">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <md:PackIcon Kind="{Binding Icon}"
+                                             Width="24" Height="24"
+                                             HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Name -->
+                    <DataGridTextColumn Header="نام"
+                                        Binding="{Binding Name}"
+                                        Width="200"/>
+
+                    <!-- Version -->
+                    <DataGridTextColumn Header="نسخه"
+                                        Binding="{Binding Version}"
+                                        Width="80"/>
+
+                    <!-- Category -->
+                    <DataGridTextColumn Header="دسته"
+                                        Binding="{Binding Category}"
+                                        Width="120"/>
+
+                    <!-- Author -->
+                    <DataGridTextColumn Header="سازنده"
+                                        Binding="{Binding Author}"
+                                        Width="150"/>
+
+                    <!-- Description -->
+                    <DataGridTextColumn Header="توضیحات"
+                                        Binding="{Binding Description}"
+                                        Width="*"/>
+
+                    <!-- Actions -->
+                    <DataGridTemplateColumn Header="عملیات" Width="200">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Click="OnEnablePlugin"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="فعال‌سازی"
+                                            IsEnabled="{Binding Status, Converter={StaticResource StatusToEnable}}">
+                                        <md:PackIcon Kind="Play" Foreground="Green"/>
+                                    </Button>
+                                    
+                                    <Button Click="OnDisablePlugin"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="غیرفعال‌سازی"
+                                            IsEnabled="{Binding Status, Converter={StaticResource StatusToDisable}}">
+                                        <md:PackIcon Kind="Pause" Foreground="Orange"/>
+                                    </Button>
+                                    
+                                    <Button Click="OnConfigurePlugin"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="تنظیمات">
+                                        <md:PackIcon Kind="Settings" Foreground="Blue"/>
+                                    </Button>
+                                    
+                                    <Button Click="OnUninstallPlugin"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="حذف">
+                                        <md:PackIcon Kind="Delete" Foreground="Red"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </md:Card>
+
+        <!-- Plugin Details -->
+        <Expander Grid.Row="2" 
+                  Header="جزئیات پلاگین"
+                  Margin="8"
+                  IsExpanded="{Binding ElementName=PluginsList, Path=SelectedItem, Converter={StaticResource NullToFalse}}">
+            <md:Card Padding="16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Plugin Info -->
+                    <TextBlock Grid.Row="0" Grid.Column="0"
+                               Text="شناسه:"
+                               FontWeight="Bold"
+                               Margin="0,4"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1"
+                               Text="{Binding ElementName=PluginsList, Path=SelectedItem.Id}"
+                               Margin="8,4,0,4"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0"
+                               Text="نام:"
+                               FontWeight="Bold"
+                               Margin="0,4"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1"
+                               Text="{Binding ElementName=PluginsList, Path=SelectedItem.Name}"
+                               Margin="8,4,0,4"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0"
+                               Text="نسخه:"
+                               FontWeight="Bold"
+                               Margin="0,4"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1"
+                               Text="{Binding ElementName=PluginsList, Path=SelectedItem.Version}"
+                               Margin="8,4,0,4"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0"
+                               Text="سازنده:"
+                               FontWeight="Bold"
+                               Margin="0,4"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1"
+                               Text="{Binding ElementName=PluginsList, Path=SelectedItem.Author}"
+                               Margin="8,4,0,4"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0"
+                               Text="دسته‌بندی:"
+                               FontWeight="Bold"
+                               Margin="0,4"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1"
+                               Text="{Binding ElementName=PluginsList, Path=SelectedItem.Category}"
+                               Margin="8,4,0,4"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0"
+                               Text="توضیحات:"
+                               FontWeight="Bold"
+                               Margin="0,4"
+                               VerticalAlignment="Top"/>
+                    <TextBlock Grid.Row="5" Grid.Column="1"
+                               Text="{Binding ElementName=PluginsList, Path=SelectedItem.Description}"
+                               TextWrapping="Wrap"
+                               Margin="8,4,0,4"/>
+                </Grid>
+            </md:Card>
+        </Expander>
+
+        <!-- Progress Bar -->
+        <ProgressBar x:Name="ProgressBar"
+                     Grid.Row="1"
+                     IsIndeterminate="True"
+                     VerticalAlignment="Top"
+                     Visibility="Collapsed"/>
+    </Grid>
+</UserControl>
+<!-- پایان کد -->

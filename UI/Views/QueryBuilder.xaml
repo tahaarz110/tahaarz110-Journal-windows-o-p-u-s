@@ -1,0 +1,281 @@
+<!-- مسیر فایل: UI/Views/QueryBuilder.xaml -->
+<!-- ابتدای کد -->
+<UserControl x:Class="TradingJournal.UI.Views.QueryBuilder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             FlowDirection="RightToLeft">
+    
+    <md:Card Margin="16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Toolbar -->
+            <ToolBar Grid.Row="0" Style="{StaticResource MaterialDesignToolBar}">
+                <TextBox x:Name="QueryNameTextBox"
+                         md:HintAssist.Hint="نام پرس‌وجو"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Width="200"
+                         Margin="8,0"/>
+                
+                <TextBox x:Name="QueryDescriptionTextBox"
+                         md:HintAssist.Hint="توضیحات"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                         Width="300"
+                         Margin="8,0"/>
+                
+                <Separator/>
+                
+                <ComboBox x:Name="SavedQueriesComboBox"
+                          ItemsSource="{Binding SavedQueries}"
+                          md:HintAssist.Hint="پرس‌وجوهای ذخیره شده"
+                          Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                          Width="200"
+                          Margin="8,0"/>
+                
+                <Button Content="بارگذاری"
+                        Click="OnLoadQuery"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Margin="4,0"/>
+                
+                <Separator/>
+                
+              <!-- بخش اصلاح شده - خط 48 تا 60 -->
+              <Button Content="اجرا"
+               Click="OnExecuteQuery"
+                Style="{StaticResource MaterialDesignRaisedButton}"
+                Margin="4,0">
+                   <Button.ToolTip>
+                      <ToolTip Content="اجرای پرس‌وجو"/>
+                     </Button.ToolTip>
+              </Button>
+<!-- پایان بخش اصلاح شده -->
+                
+                <Button Content="ذخیره"
+                        Click="OnSaveQuery"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Margin="4,0"/>
+                
+                <Button Content="خروجی"
+                        Click="OnExportResults"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Margin="4,0"/>
+                
+                <Button Content="پاک کردن همه"
+                        Click="OnClearAll"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Foreground="Red"
+                        Margin="4,0"/>
+            </ToolBar>
+
+            <!-- Query Builder Tabs -->
+            <TabControl Grid.Row="1" 
+                        Style="{StaticResource MaterialDesignTabControl}"
+                        md:ColorZoneAssist.Mode="PrimaryMid">
+                
+                <!-- Fields Tab -->
+                <TabItem Header="فیلدها">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding AvailableFields}" Margin="16">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <md:Card Margin="4" Padding="8">
+                                        <CheckBox IsChecked="{Binding IsSelected}"
+                                                  Content="{Binding DisplayName}"
+                                                  Style="{StaticResource MaterialDesignCheckBox}"/>
+                                    </md:Card>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- Filters Tab -->
+                <TabItem Header="فیلترها">
+                    <Grid Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="منطق فیلتر:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox x:Name="FilterLogicComboBox"
+                                      Width="100"
+                                      SelectedIndex="0">
+                                <ComboBoxItem Content="AND"/>
+                                <ComboBoxItem Content="OR"/>
+                            </ComboBox>
+                            
+                            <Button Content="افزودن فیلتر"
+                                    Click="OnAddFilter"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Margin="16,0,0,0"/>
+                        </StackPanel>
+
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding FilterConditions}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <md:Card Margin="0,4" Padding="8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="200"/>
+                                                    <ColumnDefinition Width="150"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <ComboBox Grid.Column="0"
+                                                          ItemsSource="{Binding DataContext.AvailableFields, 
+                                                                        RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                          DisplayMemberPath="DisplayName"
+                                                          SelectedValuePath="FieldName"
+                                                          SelectedValue="{Binding FieldName}"
+                                                          Margin="0,0,8,0"/>
+
+                                                <ComboBox Grid.Column="1"
+                                                          SelectedValue="{Binding Operator}"
+                                                          Margin="0,0,8,0">
+                                                    <ComboBoxItem Content="برابر" Tag="Equal"/>
+                                                    <ComboBoxItem Content="نابرابر" Tag="NotEqual"/>
+                                                    <ComboBoxItem Content="بزرگتر" Tag="GreaterThan"/>
+                                                    <ComboBoxItem Content="کوچکتر" Tag="LessThan"/>
+                                                    <ComboBoxItem Content="شامل" Tag="Contains"/>
+                                                    <ComboBoxItem Content="بین" Tag="Between"/>
+                                                </ComboBox>
+
+                                                <TextBox Grid.Column="2"
+                                                         Text="{Binding Value}"
+                                                         md:HintAssist.Hint="مقدار"/>
+
+                                                <Button Grid.Column="3"
+                                                        Click="OnRemoveFilter"
+                                                        Tag="{Binding}"
+                                                        Style="{StaticResource MaterialDesignIconButton}">
+                                                    <md:PackIcon Kind="Delete" Foreground="Red"/>
+                                                </Button>
+                                            </Grid>
+                                        </md:Card>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </TabItem>
+
+                <!-- Sort Tab -->
+                <TabItem Header="مرتب‌سازی">
+                    <Grid Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Button Grid.Row="0"
+                                Content="افزودن مرتب‌سازی"
+                                Click="OnAddSort"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,0,8"/>
+
+                        <ItemsControl Grid.Row="1" ItemsSource="{Binding SortFields}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <md:Card Margin="0,4" Padding="8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="200"/>
+                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{Binding Order}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,16,0"/>
+
+                                            <ComboBox Grid.Column="1"
+                                                      ItemsSource="{Binding DataContext.AvailableFields, 
+                                                                    RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                      DisplayMemberPath="DisplayName"
+                                                      SelectedValuePath="FieldName"
+                                                      SelectedValue="{Binding FieldName}"
+                                                      Margin="0,0,8,0"/>
+
+                                            <ComboBox Grid.Column="2"
+                                                      SelectedValue="{Binding Direction}"
+                                                      Margin="0,0,8,0">
+                                                <ComboBoxItem Content="صعودی" Tag="Ascending"/>
+                                                <ComboBoxItem Content="نزولی" Tag="Descending"/>
+                                            </ComboBox>
+
+                                            <Button Grid.Column="3"
+                                                    Click="OnRemoveSort"
+                                                    Tag="{Binding}"
+                                                    Style="{StaticResource MaterialDesignIconButton}">
+                                                <md:PackIcon Kind="Delete" Foreground="Red"/>
+                                            </Button>
+                                        </Grid>
+                                    </md:Card>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            <!-- Results Grid -->
+            <DataGrid Grid.Row="2"
+                      ItemsSource="{Binding QueryResults}"
+                      AutoGenerateColumns="True"
+                      CanUserAddRows="False"
+                      Style="{StaticResource MaterialDesignDataGrid}"
+                      Margin="16"/>
+
+            <!-- Status Bar -->
+            <Grid Grid.Row="3" Background="{StaticResource MaterialDesignPaper}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ProgressBar x:Name="ProgressBar"
+                             Grid.Column="0"
+                             IsIndeterminate="True"
+                             Width="100"
+                             Margin="8"
+                             Visibility="Collapsed"/>
+
+                <TextBlock x:Name="ProgressText"
+                           Grid.Column="1"
+                           VerticalAlignment="Center"
+                           Margin="8"/>
+
+                <TextBlock Grid.Column="2"
+                           Text="{Binding QueryResults.Count, StringFormat='تعداد نتایج: {0}'}"
+                           VerticalAlignment="Center"
+                           Margin="8"/>
+            </Grid>
+
+            <!-- Snackbar for notifications -->
+            <md:Snackbar x:Name="MainSnackbar"
+                         MessageQueue="{md:MessageQueue}"
+                         Grid.Row="3"
+                         HorizontalAlignment="Center"/>
+        </Grid>
+    </md:Card>
+</UserControl>
+<!-- پایان کد -->

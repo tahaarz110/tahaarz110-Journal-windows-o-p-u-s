@@ -1,0 +1,243 @@
+<!-- مسیر فایل: UI/Dialogs/NewTradeDialog.xaml -->
+<!-- ابتدای کد -->
+<Window x:Class="TradingJournal.UI.Dialogs.NewTradeDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="معامله جدید"
+        Height="700" Width="600"
+        WindowStartupLocation="CenterScreen"
+        FlowDirection="RightToLeft"
+        Style="{StaticResource MaterialDesignWindow}">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="24">
+                <!-- اطلاعات اصلی -->
+                <GroupBox Header="اطلاعات اصلی" Margin="0,8">
+                    <Grid Margin="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBox Grid.Column="0" Grid.Row="0"
+                                 Text="{Binding Symbol}"
+                                 md:HintAssist.Hint="نماد *"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="0,0,8,16"/>
+
+                        <ComboBox Grid.Column="1" Grid.Row="0"
+                                  SelectedValue="{Binding Type}"
+                                  md:HintAssist.Hint="نوع معامله *"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  Margin="8,0,0,16">
+                            <ComboBoxItem Content="خرید" Tag="Buy"/>
+                            <ComboBoxItem Content="فروش" Tag="Sell"/>
+                        </ComboBox>
+
+                        <DatePicker Grid.Column="0" Grid.Row="1"
+                                    SelectedDate="{Binding EntryDate}"
+                                    md:HintAssist.Hint="تاریخ ورود *"
+                                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                                    Margin="0,0,8,16"/>
+
+                        <md:TimePicker Grid.Column="1" Grid.Row="1"
+                                       SelectedTime="{Binding EntryTime}"
+                                       md:HintAssist.Hint="زمان ورود"
+                                       Style="{StaticResource MaterialDesignFloatingHintTimePicker}"
+                                       Margin="8,0,0,16"/>
+
+                        <TextBox Grid.Column="0" Grid.Row="2"
+                                 Text="{Binding Volume}"
+                                 md:HintAssist.Hint="حجم *"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="0,0,8,0"/>
+
+                        <ComboBox Grid.Column="1" Grid.Row="2"
+                                  Text="{Binding Strategy}"
+                                  IsEditable="True"
+                                  md:HintAssist.Hint="استراتژی"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  Margin="8,0,0,0">
+                            <ComboBoxItem Content="Scalping"/>
+                            <ComboBoxItem Content="Swing"/>
+                            <ComboBoxItem Content="Position"/>
+                            <ComboBoxItem Content="Day Trading"/>
+                        </ComboBox>
+                    </Grid>
+                </GroupBox>
+
+                <!-- قیمت‌ها -->
+                <GroupBox Header="قیمت‌ها" Margin="0,8">
+                    <Grid Margin="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBox Grid.Column="0" Grid.Row="0"
+                                 Text="{Binding EntryPrice}"
+                                 md:HintAssist.Hint="قیمت ورود *"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="0,0,8,16"/>
+
+                        <TextBox Grid.Column="1" Grid.Row="0"
+                                 Text="{Binding ExitPrice}"
+                                 md:HintAssist.Hint="قیمت خروج"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="8,0,0,16"/>
+
+                        <TextBox Grid.Column="0" Grid.Row="1"
+                                 Text="{Binding StopLoss}"
+                                 md:HintAssist.Hint="حد ضرر"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="0,0,8,0"/>
+
+                        <TextBox Grid.Column="1" Grid.Row="1"
+                                 Text="{Binding TakeProfit}"
+                                 md:HintAssist.Hint="حد سود"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="8,0,0,0"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- نتیجه معامله -->
+                <GroupBox Header="نتیجه معامله" Margin="0,8">
+                    <Grid Margin="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBox Grid.Column="0" Grid.Row="0"
+                                 Text="{Binding Profit}"
+                                 md:HintAssist.Hint="سود/زیان"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="0,0,8,16"/>
+
+                        <TextBox Grid.Column="1" Grid.Row="0"
+                                 Text="{Binding ProfitPips}"
+                                 md:HintAssist.Hint="سود/زیان (پیپ)"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="8,0,0,16"/>
+
+                        <TextBox Grid.Column="0" Grid.Row="1"
+                                 Text="{Binding Commission}"
+                                 md:HintAssist.Hint="کمیسیون"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="0,0,8,0"/>
+
+                        <TextBox Grid.Column="1" Grid.Row="1"
+                                 Text="{Binding Swap}"
+                                 md:HintAssist.Hint="سوآپ"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                 Margin="8,0,0,0"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- تحلیل و احساسات -->
+                <GroupBox Header="تحلیل و احساسات" Margin="0,8">
+                    <Grid Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <ComboBox Grid.Row="0"
+                                  Text="{Binding Emotions}"
+                                  IsEditable="True"
+                                  md:HintAssist.Hint="احساسات"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  Margin="0,0,0,16">
+                            <ComboBoxItem Content="خونسرد"/>
+                            <ComboBoxItem Content="مضطرب"/>
+                            <ComboBoxItem Content="خوشحال"/>
+                            <ComboBoxItem Content="عصبانی"/>
+                            <ComboBoxItem Content="امیدوار"/>
+                            <ComboBoxItem Content="ترسیده"/>
+                        </ComboBox>
+
+                        <md:RatingBar Grid.Row="1"
+                                      Value="{Binding Rating}"
+                                      Max="5"
+                                      Margin="0,0,0,16"/>
+
+                        <TextBox Grid.Row="2"
+                                 Text="{Binding Notes}"
+                                 md:HintAssist.Hint="یادداشت‌ها"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 MinHeight="80"
+                                 MaxHeight="150"
+                                 VerticalScrollBarVisibility="Auto"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- تصاویر -->
+                <GroupBox Header="تصاویر" Margin="0,8">
+                    <StackPanel Margin="16">
+                        <Button Content="افزودن تصویر"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                HorizontalAlignment="Right"/>
+                        
+                        <ItemsControl ItemsSource="{Binding Images}" Margin="0,16,0,0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <md:Card Width="100" Height="100" Margin="4">
+                                        <Image Source="{Binding Path}"/>
+                                    </md:Card>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left"
+                    Margin="24,16">
+            <Button Content="ذخیره"
+                    Click="OnSave"
+                    IsDefault="True"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Width="100"
+                    Margin="0,0,8,0"/>
+            
+            <Button Content="انصراف"
+                    Click="OnCancel"
+                    IsCancel="True"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Width="100"/>
+        </StackPanel>
+    </Grid>
+</Window>
+<!-- پایان کد -->

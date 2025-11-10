@@ -1,0 +1,294 @@
+<!-- مسیر فایل: UI/Views/TradeListView.xaml -->
+<!-- ابتدای کد -->
+<UserControl x:Class="TradingJournal.UI.Views.TradeListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             FlowDirection="RightToLeft">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <md:Card Grid.Row="0" Margin="8">
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Search and Filter -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBox x:Name="SearchTextBox"
+                             Width="300"
+                             md:HintAssist.Hint="جستجو..."
+                             md:TextFieldAssist.HasClearButton="True"
+                             TextChanged="OnSearchTextChanged"
+                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                             Margin="0,0,16,0"/>
+                    
+                    <ComboBox x:Name="FilterComboBox"
+                              Width="150"
+                              md:HintAssist.Hint="فیلتر"
+                              SelectionChanged="OnFilterChanged"
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <ComboBoxItem Content="همه" Tag="All" IsSelected="True"/>
+                        <ComboBoxItem Content="معاملات باز" Tag="Open"/>
+                        <ComboBoxItem Content="معاملات بسته" Tag="Closed"/>
+                        <ComboBoxItem Content="سودده" Tag="Profit"/>
+                        <ComboBoxItem Content="زیان‌ده" Tag="Loss"/>
+                        <Separator/>
+                        <ComboBoxItem Content="امروز" Tag="Today"/>
+                        <ComboBoxItem Content="این هفته" Tag="Week"/>
+                        <ComboBoxItem Content="این ماه" Tag="Month"/>
+                    </ComboBox>
+                </StackPanel>
+
+                <!-- Action Buttons -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="معامله جدید"
+                            Command="{Binding NewTradeCommand}"
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Margin="0,0,8,0"/>
+                    
+                    <Button Command="{Binding RefreshCommand}"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            ToolTip="بازخوانی">
+                        <md:PackIcon Kind="Refresh"/>
+                    </Button>
+                    
+                    <Button Command="{Binding ExportCommand}"
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            ToolTip="خروجی">
+                        <md:PackIcon Kind="FileExport"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </md:Card>
+
+        <!-- Statistics Cards -->
+        <ScrollViewer Grid.Row="1" 
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+            <StackPanel Orientation="Horizontal" Margin="8,0">
+                <!-- Total Trades -->
+                <md:Card Width="150" Margin="4">
+                    <StackPanel Margin="16">
+                        <md:PackIcon Kind="ChartLine" 
+                                     HorizontalAlignment="Center"
+                                     Width="24" Height="24"
+                                     Foreground="{StaticResource PrimaryHueMidBrush}"/>
+                        <TextBlock Text="کل معاملات"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,4"/>
+                        <TextBlock x:Name="TotalTradesText"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </md:Card>
+
+                <!-- Open Trades -->
+                <md:Card Width="150" Margin="4">
+                    <StackPanel Margin="16">
+                        <md:PackIcon Kind="ClockOutline"
+                                     HorizontalAlignment="Center"
+                                     Width="24" Height="24"
+                                     Foreground="Orange"/>
+                        <TextBlock Text="معاملات باز"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,4"/>
+                        <TextBlock x:Name="OpenTradesText"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </md:Card>
+
+                <!-- Winning Trades -->
+                <md:Card Width="150" Margin="4">
+                    <StackPanel Margin="16">
+                        <md:PackIcon Kind="TrendingUp"
+                                     HorizontalAlignment="Center"
+                                     Width="24" Height="24"
+                                     Foreground="Green"/>
+                        <TextBlock Text="معاملات موفق"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,4"/>
+                        <TextBlock x:Name="WinningTradesText"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Foreground="Green"/>
+                    </StackPanel>
+                </md:Card>
+
+                <!-- Losing Trades -->
+                <md:Card Width="150" Margin="4">
+                    <StackPanel Margin="16">
+                        <md:PackIcon Kind="TrendingDown"
+                                     HorizontalAlignment="Center"
+                                     Width="24" Height="24"
+                                     Foreground="Red"/>
+                        <TextBlock Text="معاملات ناموفق"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,4"/>
+                        <TextBlock x:Name="LosingTradesText"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Foreground="Red"/>
+                    </StackPanel>
+                </md:Card>
+
+                <!-- Total Profit -->
+                <md:Card Width="180" Margin="4">
+                    <StackPanel Margin="16">
+                        <md:PackIcon Kind="Cash"
+                                     HorizontalAlignment="Center"
+                                     Width="24" Height="24"
+                                     Foreground="{StaticResource AccentHueMidBrush}"/>
+                        <TextBlock Text="سود/زیان کل"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,4"/>
+                        <TextBlock x:Name="TotalProfitText"
+                                   Text="0"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </md:Card>
+
+                <!-- Win Rate -->
+                <md:Card Width="150" Margin="4">
+                    <StackPanel Margin="16">
+                        <md:PackIcon Kind="PercentOutline"
+                                     HorizontalAlignment="Center"
+                                     Width="24" Height="24"
+                                     Foreground="{StaticResource SecondaryHueMidBrush}"/>
+                        <TextBlock Text="نرخ برد"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,8,0,4"/>
+                        <TextBlock x:Name="WinRateText"
+                                   Text="0%"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </md:Card>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Data Grid -->
+        <md:Card Grid.Row="2" Margin="8">
+            <DataGrid ItemsSource="{Binding FilteredTrades}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      Style="{StaticResource RtlDataGrid}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="#" 
+                                        Binding="{Binding Id}" 
+                                        Width="50"/>
+                    
+                    <DataGridTextColumn Header="نماد" 
+                                        Binding="{Binding Symbol}" 
+                                        Width="100"/>
+                    
+                    <DataGridTextColumn Header="نوع" 
+                                        Binding="{Binding Type, Converter={StaticResource EnumToString}}" 
+                                        Width="80"/>
+                    
+                    <DataGridTextColumn Header="تاریخ ورود" 
+                                        Binding="{Binding EntryDate, StringFormat=yyyy/MM/dd HH:mm}" 
+                                        Width="150"/>
+                    
+                    <DataGridTextColumn Header="قیمت ورود" 
+                                        Binding="{Binding EntryPrice, StringFormat=F5}" 
+                                        Width="100"/>
+                    
+                    <DataGridTextColumn Header="حجم" 
+                                        Binding="{Binding Volume}" 
+                                        Width="80"/>
+                    
+                    <DataGridTextColumn Header="قیمت خروج" 
+                                        Binding="{Binding ExitPrice, StringFormat=F5}" 
+                                        Width="100"/>
+                    
+                    <DataGridTextColumn Header="سود/زیان" 
+                                        Binding="{Binding Profit, StringFormat=N2}" 
+                                        Width="100">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsWin}" Value="True">
+                                        <Setter Property="Foreground" Value="Green"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=IsWin}" Value="False">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="استراتژی" 
+                                        Binding="{Binding Strategy}" 
+                                        Width="120"/>
+                    
+                    <DataGridCheckBoxColumn Header="باز" 
+                                            Binding="{Binding IsOpen, Mode=OneWay}" 
+                                            Width="50"/>
+                    
+                    <DataGridTemplateColumn Header="عملیات" Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Command="{Binding DataContext.ViewDetailsCommand, 
+                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="جزئیات">
+                                        <md:PackIcon Kind="Eye" Foreground="Blue"/>
+                                    </Button>
+                                    
+                                    <Button Command="{Binding DataContext.EditTradeCommand, 
+                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="ویرایش">
+                                        <md:PackIcon Kind="Pencil" Foreground="Orange"/>
+                                    </Button>
+                                    
+                                    <Button Command="{Binding DataContext.DeleteTradeCommand, 
+                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            ToolTip="حذف">
+                                        <md:PackIcon Kind="Delete" Foreground="Red"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </md:Card>
+
+        <!-- Progress Bar -->
+        <ProgressBar x:Name="ProgressBar"
+                     Grid.Row="2"
+                     IsIndeterminate="True"
+                     VerticalAlignment="Top"
+                     Visibility="Collapsed"/>
+    </Grid>
+</UserControl>
+<!-- پایان کد -->

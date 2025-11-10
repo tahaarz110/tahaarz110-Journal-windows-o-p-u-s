@@ -1,0 +1,322 @@
+<!-- ابتدای فایل: Metadata/dashboards/main-dashboard.json -->
+<!-- مسیر: /Metadata/dashboards/main-dashboard.json -->
+
+{
+  "dashboardId": "main-dashboard",
+  "dashboardName": "Main Dashboard",
+  "dashboardNameFa": "داشبورد اصلی",
+  "version": "1.0.0",
+  "layout": {
+    "type": "grid",
+    "columns": 4,
+    "rows": "auto",
+    "gap": 16
+  },
+  "widgets": [
+    {
+      "widgetId": "total-trades",
+      "widgetName": "Total Trades",
+      "widgetNameFa": "مجموع معاملات",
+      "type": "kpi",
+      "position": {
+        "row": 1,
+        "column": 1,
+        "rowSpan": 1,
+        "columnSpan": 1
+      },
+      "configuration": {
+        "icon": "Counter",
+        "iconColor": "#2196F3",
+        "query": {
+          "entity": "Trade",
+          "aggregation": "count",
+          "filter": null
+        },
+        "format": {
+          "type": "number",
+          "decimals": 0,
+          "suffix": ""
+        },
+        "refreshInterval": 60
+      }
+    },
+    {
+      "widgetId": "win-rate",
+      "widgetName": "Win Rate",
+      "widgetNameFa": "نرخ برد",
+      "type": "kpi",
+      "position": {
+        "row": 1,
+        "column": 2,
+        "rowSpan": 1,
+        "columnSpan": 1
+      },
+      "configuration": {
+        "icon": "TrendingUp",
+        "iconColor": "#4CAF50",
+        "query": {
+          "entity": "Trade",
+          "calculation": "winRate",
+          "filter": {
+            "status": "closed"
+          }
+        },
+        "format": {
+          "type": "percentage",
+          "decimals": 2
+        },
+        "threshold": {
+          "good": 60,
+          "warning": 40,
+          "bad": 30
+        }
+      }
+    },
+    {
+      "widgetId": "total-profit",
+      "widgetName": "Total Profit/Loss",
+      "widgetNameFa": "مجموع سود/زیان",
+      "type": "kpi",
+      "position": {
+        "row": 1,
+        "column": 3,
+        "rowSpan": 1,
+        "columnSpan": 1
+      },
+      "configuration": {
+        "icon": "Cash",
+        "iconColor": "#FF9800",
+        "query": {
+          "entity": "Trade",
+          "aggregation": "sum",
+          "field": "profitLoss",
+          "filter": {
+            "status": "closed"
+          }
+        },
+        "format": {
+          "type": "currency",
+          "decimals": 2,
+          "prefix": "$"
+        },
+        "colorize": true
+      }
+    },
+    {
+      "widgetId": "best-trade",
+      "widgetName": "Best Trade",
+      "widgetNameFa": "بهترین معامله",
+      "type": "kpi",
+      "position": {
+        "row": 1,
+        "column": 4,
+        "rowSpan": 1,
+        "columnSpan": 1
+      },
+      "configuration": {
+        "icon": "Trophy",
+        "iconColor": "#9C27B0",
+        "query": {
+          "entity": "Trade",
+          "aggregation": "max",
+          "field": "profitLoss",
+          "filter": {
+            "status": "closed"
+          }
+        },
+        "format": {
+          "type": "currency",
+          "decimals": 2,
+          "prefix": "$"
+        }
+      }
+    },
+    {
+      "widgetId": "profit-chart",
+      "widgetName": "Profit Over Time",
+      "widgetNameFa": "نمودار سود در زمان",
+      "type": "chart",
+      "position": {
+        "row": 2,
+        "column": 1,
+        "rowSpan": 2,
+        "columnSpan": 2
+      },
+      "configuration": {
+        "chartType": "line",
+        "query": {
+          "entity": "Trade",
+          "groupBy": "entryDate",
+          "aggregation": "sum",
+          "field": "profitLoss",
+          "filter": {
+            "status": "closed"
+          },
+          "dateRange": "last30days"
+        },
+        "xAxis": {
+          "field": "date",
+          "label": "Date",
+          "format": "MMM DD"
+        },
+        "yAxis": {
+          "field": "value",
+          "label": "Profit/Loss ($)",
+          "format": "currency"
+        },
+        "colors": ["#2196F3"],
+        "showGrid": true,
+        "showLegend": false
+      }
+    },
+    {
+      "widgetId": "win-loss-pie",
+      "widgetName": "Win/Loss Distribution",
+      "widgetNameFa": "توزیع برد/باخت",
+      "type": "chart",
+      "position": {
+        "row": 2,
+        "column": 3,
+        "rowSpan": 1,
+        "columnSpan": 1
+      },
+      "configuration": {
+        "chartType": "pie",
+        "query": {
+          "entity": "Trade",
+          "groupBy": "outcome",
+          "aggregation": "count",
+          "filter": {
+            "status": "closed"
+          }
+        },
+        "colors": ["#4CAF50", "#F44336"],
+        "showLabels": true,
+        "showPercentage": true
+      }
+    },
+    {
+      "widgetId": "strategy-performance",
+      "widgetName": "Strategy Performance",
+      "widgetNameFa": "عملکرد استراتژی‌ها",
+      "type": "chart",
+      "position": {
+        "row": 2,
+        "column": 4,
+        "rowSpan": 1,
+        "columnSpan": 1
+      },
+      "configuration": {
+        "chartType": "bar",
+        "query": {
+          "entity": "Trade",
+          "groupBy": "strategy",
+          "aggregation": "average",
+          "field": "profitLoss",
+          "filter": {
+            "status": "closed"
+          }
+        },
+        "orientation": "horizontal",
+        "colors": ["#673AB7"],
+        "showValues": true
+      }
+    },
+    {
+      "widgetId": "recent-trades",
+      "widgetName": "Recent Trades",
+      "widgetNameFa": "معاملات اخیر",
+      "type": "table",
+      "position": {
+        "row": 4,
+        "column": 1,
+        "rowSpan": 2,
+        "columnSpan": 4
+      },
+      "configuration": {
+        "query": {
+          "entity": "Trade",
+          "orderBy": "entryDate",
+          "orderDirection": "desc",
+          "limit": 10
+        },
+        "columns": [
+          {
+            "field": "symbol",
+            "label": "Symbol",
+            "labelFa": "نماد",
+            "width": 100
+          },
+          {
+            "field": "entryDate",
+            "label": "Entry Date",
+            "labelFa": "تاریخ ورود",
+            "format": "datetime",
+            "width": 150
+          },
+          {
+            "field": "direction",
+            "label": "Direction",
+            "labelFa": "جهت",
+            "width": 80
+          },
+          {
+            "field": "volume",
+            "label": "Volume",
+            "labelFa": "حجم",
+            "format": "number",
+            "width": 80
+          },
+          {
+            "field": "profitLoss",
+            "label": "P/L",
+            "labelFa": "سود/زیان",
+            "format": "currency",
+            "colorize": true,
+            "width": 100
+          },
+          {
+            "field": "status",
+            "label": "Status",
+            "labelFa": "وضعیت",
+            "width": 80,
+            "badge": true
+          }
+        ],
+        "showPagination": false,
+        "rowClickAction": "viewDetails"
+      }
+    }
+  ],
+  "filters": [
+    {
+      "filterId": "dateRange",
+      "filterName": "Date Range",
+      "filterNameFa": "بازه زمانی",
+      "type": "dateRange",
+      "defaultValue": "last30days",
+      "options": [
+        { "value": "today", "label": "Today", "labelFa": "امروز" },
+        { "value": "yesterday", "label": "Yesterday", "labelFa": "دیروز" },
+        { "value": "last7days", "label": "Last 7 Days", "labelFa": "7 روز گذشته" },
+        { "value": "last30days", "label": "Last 30 Days", "labelFa": "30 روز گذشته" },
+        { "value": "thisMonth", "label": "This Month", "labelFa": "این ماه" },
+        { "value": "lastMonth", "label": "Last Month", "labelFa": "ماه گذشته" },
+        { "value": "custom", "label": "Custom", "labelFa": "سفارشی" }
+      ]
+    },
+    {
+      "filterId": "account",
+      "filterName": "Account",
+      "filterNameFa": "حساب",
+      "type": "dropdown",
+      "multiple": false,
+      "defaultValue": "all",
+      "options": "dynamic:accounts"
+    }
+  ],
+  "refreshInterval": 60,
+  "autoRefresh": true
+}
+
+<!-- پایان فایل: Metadata/dashboards/main-dashboard.json -->
